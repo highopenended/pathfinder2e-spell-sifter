@@ -44,6 +44,17 @@ const TraditionFilter: React.FC<TraditionFilterProps> = ({
     <div className="tradition-filter">
       <div className="tradition-header">
         <span className="tradition-label">Traditions:</span>
+        <div className="tradition-buttons">
+          {traditions.map(tradition => (
+            <button
+              key={tradition}
+              className={getTraditionClass(tradition)}
+              onClick={() => toggleTradition(tradition)}
+            >
+              {tradition}
+            </button>
+          ))}
+        </div>
         <div className="logic-toggle">
           <button 
             className={`logic-btn ${logicMode === 'AND' ? 'active' : ''}`}
@@ -58,17 +69,6 @@ const TraditionFilter: React.FC<TraditionFilterProps> = ({
             OR
           </button>
         </div>
-      </div>
-      <div className="tradition-pills">
-        {traditions.map(tradition => (
-          <button
-            key={tradition}
-            className={getTraditionClass(tradition)}
-            onClick={() => toggleTradition(tradition)}
-          >
-            {tradition}
-          </button>
-        ))}
       </div>
     </div>
   )

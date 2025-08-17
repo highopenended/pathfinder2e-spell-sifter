@@ -1,15 +1,56 @@
 .App {
   text-align: center;
-  padding: 40px 20px;
+  padding: 10px 0;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  width: 100vw;
 }
 
 .App h1 {
   color: #212529;
   font-weight: 700;
   font-size: 2.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-layout {
+  display: flex;
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: flex-start;
+  padding: 0 20px;
+}
+
+.search-criteria {
+  flex: 1;
+  border-right: 2px solid var(--color-border-primary);
+  padding-right: 15px;
+  box-sizing: border-box;
+}
+
+.column-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.section-box {
+  background: var(--color-bg-primary);
+  border: 2px solid var(--color-border-primary);
+  border-radius: 4px;
+  padding: 12px 12px 2px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px var(--color-shadow-light);
+}
+
+.section-box:last-child {
+  margin-bottom: 0;
+}
+
+.results-section {
+  flex: 1;
+  padding-left: 15px;
+  box-sizing: border-box;
 }

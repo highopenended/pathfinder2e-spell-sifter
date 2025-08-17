@@ -1,9 +1,8 @@
 .spell-name-search {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 20px;
   width: 100%;
+  padding: 4px 0;
 }
 
 .search-row {

@@ -34,7 +34,7 @@ function App() {
 
         if (error) {
           console.error('Error fetching spell count:', error)
-        } else {
+      } else {
           console.log('Spell count:', count)
           setSpellCount(count)
         }
@@ -127,39 +127,48 @@ function App() {
     <div className="App">
       <h1>Spell Sifter</h1>
       
-      {/* Debug spell counter */}
-      <div style={{ 
-        background: '#f8f9fa', 
-        padding: '10px', 
-        marginBottom: '20px', 
-        borderRadius: '6px',
-        border: '2px solid #dee2e6',
-        textAlign: 'center'
-      }}>
-        <strong>Debug:</strong> Database contains {spellCount !== null ? spellCount : 'loading...'} spells
-      </div>
+      <div className="app-layout">
+        {/* Left side - Search Criteria */}
+        <div className="search-criteria">
+          <div className="column-container">
+            <div className="section-box">
+              <SpellNameSearch
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                onSearch={handleSearch}
+              />
+        </div>
+            <div className="section-box">
+              <TraditionFilter
+                traditionStates={traditionStates}
+                onTraditionChange={handleTraditionChange}
+                logicMode={logicMode}
+                onLogicChange={setLogicMode}
+              />
+                </div>
+            <div className="section-box">
+              <TraitFilter
+                traitStates={traitStates}
+                onTraitChange={handleTraitChange}
+                logicMode={traitLogicMode}
+                onLogicChange={setTraitLogicMode}
+              />
+            </div>
+          </div>
+        </div>
 
-      <SpellNameSearch
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        onSearch={handleSearch}
-      />
-      <TraditionFilter
-        traditionStates={traditionStates}
-        onTraditionChange={handleTraditionChange}
-        logicMode={logicMode}
-        onLogicChange={setLogicMode}
-      />
-      <TraitFilter
-        traitStates={traitStates}
-        onTraitChange={handleTraitChange}
-        logicMode={traitLogicMode}
-        onLogicChange={setTraitLogicMode}
-      />
-      <SpellListOutput
-        spells={spells}
-        loading={loading}
-      />
+        {/* Right side - Results */}
+        <div className="results-section">
+          <div className="column-container">
+            <div className="section-box">
+              <SpellListOutput
+                spells={spells}
+                loading={loading}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
