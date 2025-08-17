@@ -1,0 +1,54 @@
+:root {
+  /* Base colors - slightly darker and more muted */
+  --color-primary: #1a1a1a;
+  --color-secondary: #2d2d2d;
+  --color-accent: #404040;
+  
+  /* Background colors */
+  --color-bg-primary: #f8f9fa;
+  --color-bg-secondary: #e9ecef;
+  --color-bg-tertiary: #dee2e6;
+  
+  /* Text colors */
+  --color-text-primary: #212529;
+  --color-text-secondary: #495057;
+  --color-text-muted: #6c757d;
+  
+  /* Border colors */
+  --color-border-primary: #dee2e6;
+  --color-border-secondary: #adb5bd;
+  --color-border-accent: #6c757d;
+  
+  /* Button colors - more muted, less candy-like */
+  --color-btn-primary: #495057;
+  --color-btn-primary-hover: #343a40;
+  --color-btn-primary-active: #212529;
+  
+  /* Success/Include colors - darker green */
+  --color-success: #1e7e34;
+  --color-success-hover: #155724;
+  --color-success-border: #1e7e34;
+  
+  /* Danger/Exclude colors - darker red */
+  --color-danger: #c82333;
+  --color-danger-hover: #a71e2a;
+  --color-danger-border: #c82333;
+  
+  /* Neutral button colors */
+  --color-neutral: #6c757d;
+  --color-neutral-hover: #5a6268;
+  --color-neutral-border: #6c757d;
+  
+  /* Shadow colors */
+  --color-shadow-light: rgba(0, 0, 0, 0.1);
+  --color-shadow-medium: rgba(0, 0, 0, 0.15);
+  --color-shadow-heavy: rgba(0, 0, 0, 0.2);
+  
+  /* Success shadow colors */
+  --color-shadow-success: rgba(30, 126, 52, 0.3);
+  --color-shadow-success-hover: rgba(30, 126, 52, 0.4);
+  
+  /* Danger shadow colors */
+  --color-shadow-danger: rgba(200, 35, 51, 0.3);
+  --color-shadow-danger-hover: rgba(200, 35, 51, 0.4);
+}

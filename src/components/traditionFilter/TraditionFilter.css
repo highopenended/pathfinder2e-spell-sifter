@@ -1,0 +1,108 @@
+.tradition-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.tradition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.tradition-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: 16px;
+}
+
+.logic-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.logic-btn {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  border: 2px solid var(--color-border-primary);
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: all 0.1s ease;
+}
+
+.logic-btn.active {
+  background: var(--color-btn-primary);
+  color: #fff;
+  border-color: var(--color-btn-primary);
+}
+
+.logic-btn:hover:not(.active) {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border-secondary);
+}
+
+.tradition-pills {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.tradition-btn {
+  background: var(--color-bg-primary);
+  color: var(--color-text-muted);
+  border: 2px solid var(--color-border-primary);
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: all 0.1s ease;
+  min-width: 100px;
+  text-align: center;
+  box-shadow: 0 1px 3px var(--color-shadow-light);
+}
+
+.tradition-btn.include {
+  background: var(--color-success);
+  color: #fff;
+  border-color: var(--color-success-border);
+  box-shadow: 0 2px 4px var(--color-shadow-success);
+}
+
+.tradition-btn.exclude {
+  background: var(--color-danger);
+  color: #fff;
+  border-color: var(--color-danger-border);
+  box-shadow: 0 2px 4px var(--color-shadow-danger);
+}
+
+.tradition-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px var(--color-shadow-medium);
+}
+
+.tradition-btn.include:hover {
+  background: var(--color-success-hover);
+  border-color: var(--color-success-hover);
+  box-shadow: 0 3px 6px var(--color-shadow-success-hover);
+}
+
+.tradition-btn.exclude:hover {
+  background: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+  box-shadow: 0 3px 6px var(--color-shadow-danger-hover);
+}
+
+.tradition-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px var(--color-shadow-light);
+}

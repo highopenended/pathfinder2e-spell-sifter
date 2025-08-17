@@ -42,3 +42,18 @@ Order of Operations
 7) Finally, we can remove the helper tables:
   - DROP TABLE spell_traditions_helper;
   - DROP TABLE spell_traits_helper;
+
+
+
+Other Notes:
+
+- I had an issue with permissions. I kept trying to fix RLS policies but it ended up being an issues with Basic Database Permissions. Had to run the following in SQL Editor to fix it:
+
+    -- Grant direct SELECT permission to anon and public roles
+    GRANT SELECT ON spells TO anon;
+    GRANT SELECT ON spells TO public;
+
+    -- Also grant usage on the schema
+    GRANT USAGE ON SCHEMA public TO anon;
+    GRANT USAGE ON SCHEMA public TO public;
+

@@ -1,0 +1,57 @@
+.spell-name-search {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.search-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.search-input {
+  flex: 1;
+  background: #f8f9fa;
+  border: 2px solid #dee2e6;
+  color: #212529;
+  padding: 12px 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  min-width: 0;
+  border-radius: 6px;
+  transition: border-color 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #6c757d;
+  box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.1);
+}
+
+.search-btn {
+  background: #495057;
+  color: #fff;
+  border: 2px solid #495057;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  white-space: nowrap;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.search-btn:hover {
+  background: #343a40;
+  border-color: #343a40;
+  transform: translateY(-1px);
+}
+
+.search-btn:active {
+  background: #212529;
+  transform: translateY(0);
+}

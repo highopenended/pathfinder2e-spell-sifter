@@ -1,274 +1,165 @@
-import { useState } from 'react'
-import { supabase } from './lib/supabase'
+import React, { useState, useEffect } from 'react'
 import './App.css'
-
-interface Spell {
-  id: number
-  name: string
-  rank: number
-  spell_type: string
-  rarity: string
-  save_type: string
-  is_custom: boolean
-  is_favorite: boolean
-}
-
-type TraditionState = 'unselected' | 'include' | 'exclude'
+import SpellNameSearch from './components/spellNameSearch/SpellNameSearch'
+import TraditionFilter from './components/traditionFilter/TraditionFilter'
+import type { TraditionState } from './components/traditionFilter/TraditionFilter'
+import TraitFilter from './components/traitFilter/TraitFilter'
+import type { TraitState } from './components/traitFilter/TraitFilter'
+import SpellListOutput from './components/spellListOutput/SpellListOutput'
+import { supabase } from './lib/supabase'
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedRank, setSelectedRank] = useState<string>('')
-  const [selectedType, setSelectedType] = useState<string>('')
-  const [selectedRarity, setSelectedRarity] = useState<string>('')
-  const [selectedSave, setSelectedSave] = useState<string>('')
-  const [traditionsLogic, setTraditionsLogic] = useState<'AND' | 'OR'>('OR')
   const [traditionStates, setTraditionStates] = useState<Record<string, TraditionState>>({
     'Arcane': 'unselected',
     'Divine': 'unselected',
     'Occult': 'unselected',
     'Primal': 'unselected'
   })
-  const [spells, setSpells] = useState<Spell[]>([])
+  const [traitStates, setTraitStates] = useState<Record<string, TraitState>>({})
+  const [logicMode, setLogicMode] = useState<'AND' | 'OR'>('OR')
+  const [traitLogicMode, setTraitLogicMode] = useState<'AND' | 'OR'>('OR')
   const [loading, setLoading] = useState(false)
+  const [spells, setSpells] = useState<any[]>([])
+  const [spellCount, setSpellCount] = useState<number | null>(null)
 
-  const toggleTradition = (tradition: string) => {
-    setTraditionStates(prev => {
-      const current = prev[tradition]
-      const next: Record<string, TraditionState> = { ...prev }
-      
-      if (current === 'unselected') {
-        next[tradition] = 'include'
-      } else if (current === 'include') {
-        next[tradition] = 'exclude'
-      } else {
-        next[tradition] = 'unselected'
-      }
-      
-      return next
-    })
-  }
+  // Debug: Fetch spell count on component mount
+  useEffect(() => {
+    const fetchSpellCount = async () => {
+      try {
+        console.log('Fetching spell count...')
+        const { count, error } = await supabase
+          .from('spells')
+          .select('*', { count: 'exact', head: true })
 
-  const searchSpells = async () => {
-    setLoading(true)
-    try {
-      const activeTraditions = Object.entries(traditionStates).filter(([_, state]) => state !== 'unselected')
-      const needsTraditions = activeTraditions.length > 0
-      
-      // Use the appropriate view based on whether we need tradition data
-      const viewName = needsTraditions ? 'v_spell_flat_effective' : 'v_spell_search_effective'
-      
-      console.log('Using view:', viewName)
-      console.log('Active traditions:', activeTraditions)
-      
-      let query = supabase
-        .from(viewName)
-        .select('*')
-        .order('name')
-
-      if (searchTerm.trim()) {
-        query = query.ilike('name', `%${searchTerm}%`)
+        if (error) {
+          console.error('Error fetching spell count:', error)
+        } else {
+          console.log('Spell count:', count)
+          setSpellCount(count)
+        }
+      } catch (err) {
+        console.error('Failed to fetch spell count:', err)
       }
-      if (selectedRank !== '') {
-        query = query.eq('rank', parseInt(selectedRank))
-      }
-      if (selectedType !== '') {
-        query = query.eq('spell_type', selectedType)
-      }
-      if (selectedRarity !== '') {
-        query = query.eq('rarity', selectedRarity)
-      }
-      if (selectedSave !== '') {
-        query = query.eq('save_type', selectedSave)
-      }
-
-      const { data, error } = await query.limit(100)
-      
-      if (error) {
-        console.error('Query error:', error)
-        throw error
-      }
-      
-      console.log('Raw data from view:', data)
-      console.log('First spell sample:', data?.[0])
-      
-      let filteredData = data || []
-      
-      // Apply tradition filtering if needed
-      if (needsTraditions) {
-        console.log('Applying tradition filtering...')
-        filteredData = filteredData.filter(spell => {
-          const spellTraditions = spell.traditions || []
-          console.log(`Spell ${spell.name} has traditions:`, spellTraditions)
-          
-          if (traditionsLogic === 'AND') {
-            // All include conditions must be true, no exclude conditions can be true
-            const includeTraditions = activeTraditions.filter(([_, state]) => state === 'include').map(([name]) => name)
-            const excludeTraditions = activeTraditions.filter(([_, state]) => state === 'exclude').map(([name]) => name)
-            
-            const hasAllInclude = includeTraditions.every(t => spellTraditions.includes(t))
-            const hasNoExclude = !excludeTraditions.some(t => spellTraditions.includes(t))
-            
-            console.log(`Include: ${includeTraditions}, Exclude: ${excludeTraditions}`)
-            console.log(`Has all include: ${hasAllInclude}, Has no exclude: ${hasNoExclude}`)
-            
-            return hasAllInclude && hasNoExclude
-          } else {
-            // OR logic: at least one include condition must be true, no exclude conditions can be true
-            const includeTraditions = activeTraditions.filter(([_, state]) => state === 'include').map(([name]) => name)
-            const excludeTraditions = activeTraditions.filter(([_, state]) => state === 'exclude').map(([name]) => name)
-            
-            const hasAnyInclude = includeTraditions.length === 0 || includeTraditions.some(t => spellTraditions.includes(t))
-            const hasNoExclude = !excludeTraditions.some(t => spellTraditions.includes(t))
-            
-            console.log(`Include: ${includeTraditions}, Exclude: ${excludeTraditions}`)
-            console.log(`Has any include: ${hasAnyInclude}, Has no exclude: ${hasNoExclude}`)
-            
-            return hasAnyInclude && hasNoExclude
-          }
-        })
-        
-        console.log('After tradition filtering:', filteredData.length, 'spells')
-      }
-      
-      setSpells(filteredData)
-    } catch (err) {
-      console.error('Search error:', err)
-      setSpells([])
-    } finally {
-      setLoading(false)
     }
+
+    fetchSpellCount()
+  }, [])
+
+  const handleSearch = () => {
+    console.log('Searching for:', searchTerm)
+    console.log('Tradition states:', traditionStates)
+    console.log('Trait states:', traitStates)
+    console.log('Tradition logic mode:', logicMode)
+    console.log('Trait logic mode:', traitLogicMode)
+    // TODO: Implement actual search logic
+    
+    console.log('______________________')
+    
+    // Mock data for now
+    setLoading(true)
+    setTimeout(() => {
+      const mockSpells = [
+        {
+          id: 1,
+          name: 'Fireball',
+          rank: 3,
+          spell_type: 'Spell',
+          rarity: 'Common',
+          save_type: 'Reflex',
+          traditions: ['Arcane', 'Primal']
+        },
+        {
+          id: 2,
+          name: 'Heal',
+          rank: 1,
+          spell_type: 'Spell',
+          rarity: 'Common',
+          save_type: 'None',
+          traditions: ['Divine', 'Primal']
+        },
+        {
+          id: 3,
+          name: 'Detect Magic',
+          rank: 1,
+          spell_type: 'Cantrip',
+          rarity: 'Common',
+          save_type: 'None',
+          traditions: ['Arcane', 'Divine', 'Occult', 'Primal']
+        }
+      ]
+      setSpells(mockSpells)
+      setLoading(false)
+    }, 1000)
   }
 
-  const clearFilters = () => {
-    setSearchTerm('')
-    setSelectedRank('')
-    setSelectedType('')
-    setSelectedRarity('')
-    setSelectedSave('')
-    setTraditionStates({
-      'Arcane': 'unselected',
-      'Divine': 'unselected',
-      'Occult': 'unselected',
-      'Primal': 'unselected'
+  const handleTraditionChange = (tradition: string, state: TraditionState) => {
+    setTraditionStates(prev => ({
+      ...prev,
+      [tradition]: state
+    }))
+  }
+
+  const handleTraitChange = (trait: string, state: TraitState) => {
+    console.log(`Trait ${trait} changing to state: ${state}`)
+    console.log('Previous traitStates:', traitStates)
+    
+    setTraitStates(prev => {
+      // If the trait is becoming unselected, remove it from state entirely
+      if (state === 'unselected') {
+        const newState = { ...prev }
+        delete newState[trait]
+        console.log('New traitStates (removed unselected):', newState)
+        return newState
+      }
+      
+      // Otherwise, update the trait state
+      const newState = {
+        ...prev,
+        [trait]: state
+      }
+      console.log('New traitStates (updated):', newState)
+      return newState
     })
-    setSpells([])
-  }
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    searchSpells()
-  }
-
-  const getTraditionClass = (tradition: string) => {
-    const state = traditionStates[tradition]
-    if (state === 'include') return 'tradition-btn include'
-    if (state === 'exclude') return 'tradition-btn exclude'
-    return 'tradition-btn'
   }
 
   return (
     <div className="App">
-      <div className="search-section">
-        <div className="search-row">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && searchSpells()}
-            placeholder="Search spells..."
-            className="search-input"
-          />
-          <button onClick={searchSpells} disabled={loading} className="search-btn">
-            {loading ? '...' : 'Search'}
-          </button>
-        </div>
-        
-        <div className="filters-row">
-          <select value={selectedRank} onChange={(e) => setSelectedRank(e.target.value)} className="filter-select">
-            <option value="">All Ranks</option>
-            <option value="0">Cantrip</option>
-            <option value="1">Rank 1</option>
-            <option value="2">Rank 2</option>
-            <option value="3">Rank 3</option>
-            <option value="4">Rank 4</option>
-            <option value="5">Rank 5</option>
-            <option value="6">Rank 6</option>
-            <option value="7">Rank 7</option>
-            <option value="8">Rank 8</option>
-            <option value="9">Rank 9</option>
-            <option value="10">Rank 10</option>
-          </select>
-          
-          <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)} className="filter-select">
-            <option value="">All Types</option>
-            <option value="Cantrip">Cantrip</option>
-            <option value="Spell">Spell</option>
-            <option value="Focus">Focus</option>
-            <option value="Ritual">Ritual</option>
-          </select>
-          
-          <select value={selectedRarity} onChange={(e) => setSelectedRarity(e.target.value)} className="filter-select">
-            <option value="">All Rarities</option>
-            <option value="Common">Common</option>
-            <option value="Uncommon">Uncommon</option>
-            <option value="Rare">Rare</option>
-            <option value="Unique">Unique</option>
-          </select>
-          
-          <select value={selectedSave} onChange={(e) => setSelectedSave(e.target.value)} className="filter-select">
-            <option value="">All Saves</option>
-            <option value="None">No Save</option>
-            <option value="Fortitude">Fortitude</option>
-            <option value="Reflex">Reflex</option>
-            <option value="Will">Will</option>
-          </select>
-          
-          <button onClick={clearFilters} className="clear-btn">Clear</button>
-                </div>
-
-        <div className="traditions-section">
-          <div className="traditions-header">
-            <span className="traditions-label">Traditions:</span>
-            <div className="logic-toggle">
-              <button 
-                className={`logic-btn ${traditionsLogic === 'AND' ? 'active' : ''}`}
-                onClick={() => setTraditionsLogic('AND')}
-              >
-                AND
-              </button>
-              <button 
-                className={`logic-btn ${traditionsLogic === 'OR' ? 'active' : ''}`}
-                onClick={() => setTraditionsLogic('OR')}
-              >
-                OR
-              </button>
-            </div>
-          </div>
-          <div className="traditions-row">
-            {Object.keys(traditionStates).map(tradition => (
-              <button
-                key={tradition}
-                className={getTraditionClass(tradition)}
-                onClick={() => toggleTradition(tradition)}
-              >
-                {tradition}
-              </button>
-            ))}
-          </div>
-        </div>
+      <h1>Spell Sifter</h1>
+      
+      {/* Debug spell counter */}
+      <div style={{ 
+        background: '#f8f9fa', 
+        padding: '10px', 
+        marginBottom: '20px', 
+        borderRadius: '6px',
+        border: '2px solid #dee2e6',
+        textAlign: 'center'
+      }}>
+        <strong>Debug:</strong> Database contains {spellCount !== null ? spellCount : 'loading...'} spells
       </div>
 
-      <div className="results">
-        {spells.map(spell => (
-          <div key={spell.id} className="spell-item">
-            <div className="spell-name">{spell.name}</div>
-            <div className="spell-details">
-              {spell.rank === 0 ? 'Cantrip' : `Rank ${spell.rank}`} • {spell.spell_type} • {spell.rarity} • {spell.save_type}
-              {spell.is_custom && <span className="custom-tag">Custom</span>}
-            </div>
-      </div>
-        ))}
-      </div>
+      <SpellNameSearch
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        onSearch={handleSearch}
+      />
+      <TraditionFilter
+        traditionStates={traditionStates}
+        onTraditionChange={handleTraditionChange}
+        logicMode={logicMode}
+        onLogicChange={setLogicMode}
+      />
+      <TraitFilter
+        traitStates={traitStates}
+        onTraitChange={handleTraitChange}
+        logicMode={traitLogicMode}
+        onLogicChange={setTraitLogicMode}
+      />
+      <SpellListOutput
+        spells={spells}
+        loading={loading}
+      />
     </div>
   )
 }
