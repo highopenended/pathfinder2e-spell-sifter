@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: 15px;
   margin-bottom: 20px;
+  margin-top: -8px; /* Reduce top spacing */
   width: 100%;
 }
 
@@ -11,6 +12,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-top: 8px; /* Add small top margin to compensate */
 }
 
 .trait-label {
@@ -28,10 +30,6 @@
 .logic-toggle {
   display: flex;
   gap: 4px;
-}
-
-.logic-btn {
-  /* Inherits from .btn-base in globals.css */
 }
 
 .logic-btn.active {
@@ -87,21 +85,6 @@
   box-shadow: 0 0 0 3px var(--color-shadow-light);
 }
 
-.clear-all-btn {
-  /* Inherits from .btn-danger in globals.css */
-  white-space: nowrap;
-}
-
-.clear-all-btn:hover:not(:disabled) {
-  background: var(--color-danger-hover);
-  border-color: var(--color-danger-hover);
-}
-
-.clear-all-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 .trait-pills-container {
   max-height: 300px;
   overflow-y: auto;
@@ -117,19 +100,6 @@
   gap: 6px;
   padding: 12px;
   min-height: 50px;
-}
-
-/* Trait buttons now properly use shared tag styles */
-.trait-btn.tag-base {
-  /* All base styles are inherited from .tag-base in globals.css */
-}
-
-.trait-btn.tag-base.tag-include {
-  /* All include styles are inherited from .tag-include in globals.css */
-}
-
-.trait-btn.tag-base.tag-exclude {
-  /* All exclude styles are inherited from .tag-exclude in globals.css */
 }
 
 /* Custom scrollbar for webkit browsers */

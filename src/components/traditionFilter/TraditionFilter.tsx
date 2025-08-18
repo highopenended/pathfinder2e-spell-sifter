@@ -35,9 +35,9 @@ const TraditionFilter: React.FC<TraditionFilterProps> = ({
 
   const getTraditionClass = (tradition: string) => {
     const state = traditionStates[tradition]
-    if (state === 'include') return 'tradition-btn tag-base tag-include'
-    if (state === 'exclude') return 'tradition-btn tag-base tag-exclude'
-    return 'tradition-btn tag-base'
+    if (state === 'include') return 'tag-base tag-include'
+    if (state === 'exclude') return 'tag-base tag-exclude'
+    return 'tag-base'
   }
 
   return (
@@ -57,13 +57,13 @@ const TraditionFilter: React.FC<TraditionFilterProps> = ({
         </div>
         <div className="logic-toggle">
           <button 
-            className={`logic-btn btn-base ${logicMode === 'AND' ? 'btn-primary' : ''}`}
+            className={`btn-base ${logicMode === 'AND' ? 'btn-primary' : ''}`}
             onClick={() => onLogicChange('AND')}
           >
             AND
           </button>
           <button 
-            className={`logic-btn btn-base ${logicMode === 'OR' ? 'btn-primary' : ''}`}
+            className={`btn-base ${logicMode === 'OR' ? 'btn-primary' : ''}`}
             onClick={() => onLogicChange('OR')}
           >
             OR

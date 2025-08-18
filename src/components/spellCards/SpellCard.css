@@ -34,7 +34,7 @@
   margin-top: 8px;
 }
 
-.trait-tag.tag-base.tag-readonly {
-  /* All styles are inherited from .tag-base and .tag-readonly in globals.css */
+/* Component-specific styling for trait tags */
+.spell-traits .tag-base.tag-readonly {
   cursor: help; /* Indicates tooltip is available */
 }
