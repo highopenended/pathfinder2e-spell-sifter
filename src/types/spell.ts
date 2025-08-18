@@ -23,6 +23,7 @@ export interface SpellWithJoins extends SpellRow {
     traits: {
       id: number
       name: string
+      description: string
     }
   }>
   spell_traditions: Array<{

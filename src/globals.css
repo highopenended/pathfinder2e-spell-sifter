@@ -8,6 +8,7 @@
   --color-bg-primary: #f8f9fa;
   --color-bg-secondary: #e9ecef;
   --color-bg-tertiary: #dee2e6;
+  --color-white: #ffffff;
   
   /* Text colors */
   --color-text-primary: #212529;
@@ -44,6 +45,19 @@
   --color-shadow-medium: rgba(0, 0, 0, 0.15);
   --color-shadow-heavy: rgba(0, 0, 0, 0.2);
   
+  /* Typography */
+  --font-family-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  /* Transitions */
+  --transition-fast: all 0.1s ease;
+  --transition-medium: all 0.2s ease;
+  --transition-slow: all 0.3s ease;
+  
+  /* Border radius */
+  --border-radius-small: 4px;
+  --border-radius-medium: 6px;
+  --border-radius-large: 8px;
+  
   /* Success shadow colors */
   --color-shadow-success: rgba(30, 126, 52, 0.3);
   --color-shadow-success-hover: rgba(30, 126, 52, 0.4);
@@ -51,4 +65,167 @@
   /* Danger shadow colors */
   --color-shadow-danger: rgba(200, 35, 51, 0.3);
   --color-shadow-danger-hover: rgba(200, 35, 51, 0.4);
+}
+
+/* =========================
+   Shared Tag/Pill Styles
+   ========================= */
+
+/* Base tag styling that can be extended by components */
+.tag-base {
+  background: var(--color-bg-primary);
+  color: var(--color-text-muted);
+  border: 2px solid var(--color-border-primary);
+  padding: 6px 12px;
+  font-family: var(--font-family-primary);
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: var(--border-radius-small);
+  transition: var(--transition-fast);
+  white-space: nowrap;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px var(--color-shadow-light);
+  cursor: pointer;
+}
+
+.tag-base:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px var(--color-shadow-medium);
+}
+
+.tag-base:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px var(--color-shadow-light);
+}
+
+/* Include/Include state styles */
+.tag-include {
+  background: var(--color-success);
+  color: var(--color-white);
+  border-color: var(--color-success-border);
+  box-shadow: 0 2px 4px var(--color-shadow-success);
+}
+
+.tag-include:hover {
+  background: var(--color-success-hover);
+  border-color: var(--color-success-hover);
+  box-shadow: 0 3px 6px var(--color-shadow-success-hover);
+}
+
+/* Exclude/Exclude state styles */
+.tag-exclude {
+  background: var(--color-danger);
+  color: var(--color-white);
+  border-color: var(--color-danger-border);
+  box-shadow: 0 2px 4px var(--color-shadow-danger);
+}
+
+.tag-exclude:hover {
+  background: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+  box-shadow: 0 3px 6px var(--color-shadow-danger-hover);
+}
+
+/* Read-only tag styles (for display purposes) */
+.tag-readonly {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-secondary);
+  cursor: default;
+}
+
+.tag-readonly:hover {
+  transform: none;
+  box-shadow: 0 1px 3px var(--color-shadow-light);
+}
+
+/* =========================
+   Shared Button Styles
+   ========================= */
+
+/* Base button styling that can be extended by components */
+.btn-base {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-muted);
+  border: 2px solid var(--color-border-primary);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: var(--font-family-primary);
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: var(--border-radius-small);
+  transition: var(--transition-fast);
+}
+
+.btn-base:hover {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border-secondary);
+}
+
+/* Primary button styles */
+.btn-primary {
+  background: var(--color-btn-primary);
+  color: var(--color-white);
+  border-color: var(--color-btn-primary);
+}
+
+.btn-primary:hover {
+  background: var(--color-btn-primary-hover);
+  border-color: var(--color-btn-primary-hover);
+}
+
+/* Danger button styles */
+.btn-danger {
+  background: var(--color-danger);
+  color: var(--color-white);
+  border-color: var(--color-danger);
+}
+
+.btn-danger:hover {
+  background: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+}
+
+/* Neutral button styles */
+.btn-neutral {
+  background: var(--color-neutral);
+  color: var(--color-white);
+  border-color: var(--color-neutral);
+}
+
+.btn-neutral:hover {
+  background: var(--color-neutral-hover);
+  border-color: var(--color-neutral-hover);
+}
+
+/* Button states */
+.btn-base:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-base:disabled:hover {
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border-primary);
+}
+
+/* Secondary button styles (for pagination, etc.) */
+.btn-secondary {
+  background: var(--color-white);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--color-border-secondary);
+  background: var(--color-bg-primary);
+  transform: translateY(-1px);
+}
+
+.btn-secondary.active {
+  background: var(--color-text-secondary);
+  color: var(--color-white);
+  border-color: var(--color-text-secondary);
 }

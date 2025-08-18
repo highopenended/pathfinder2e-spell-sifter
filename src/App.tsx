@@ -6,8 +6,9 @@ import type { TraditionState } from './components/traditionFilter/TraditionFilte
 import TraitFilter from './components/traitFilter/TraitFilter'
 import type { TraitState } from './components/traitFilter/TraitFilter'
 import SpellListOutput from './components/spellListOutput/SpellListOutput'
-import { DatabaseTest } from './components/DatabaseTest'
-import { fetchSpellCount } from './api/spells'
+import { DatabaseTest } from './components/databaseTest/DatabaseTest'
+import { fetchSpellCount, fetchSpellsWithTraits } from './api/spells'
+import type { SpellWithJoins } from './types/spell'
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -21,8 +22,13 @@ function App() {
   const [logicMode, setLogicMode] = useState<'AND' | 'OR'>('OR')
   const [traitLogicMode, setTraitLogicMode] = useState<'AND' | 'OR'>('OR')
   const [loading, setLoading] = useState(false)
-  const [spells, setSpells] = useState<any[]>([])
+  const [spells, setSpells] = useState<SpellWithJoins[]>([])
   const [spellCount, setSpellCount] = useState<number | null>(null)
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const SPELLS_PER_PAGE = 10
 
   // Debug: Fetch spell count on component mount
   useEffect(() => {
@@ -30,6 +36,9 @@ function App() {
       try {
         const count = await fetchSpellCount()
         setSpellCount(count)
+        if (count) {
+          setTotalPages(Math.ceil(count / SPELLS_PER_PAGE))
+        }
       } catch (err) {
         console.error('Failed to fetch spell count:', err)
       }
@@ -38,51 +47,59 @@ function App() {
     getSpellCount()
   }, [])
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     console.log('Searching for:', searchTerm)
     console.log('Tradition states:', traditionStates)
     console.log('Trait states:', traitStates)
     console.log('Tradition logic mode:', logicMode)
     console.log('Trait logic mode:', traitLogicMode)
-    // TODO: Implement actual search logic
     
-    console.log('______________________')
-    
-    // Mock data for now
     setLoading(true)
-    setTimeout(() => {
-      const mockSpells = [
-        {
-          id: 1,
-          name: 'Fireball',
-          rank: 3,
-          spell_type: 'Spell',
-          rarity: 'Common',
-          save_type: 'Reflex',
-          traditions: ['Arcane', 'Primal']
-        },
-        {
-          id: 2,
-          name: 'Heal',
-          rank: 1,
-          spell_type: 'Spell',
-          rarity: 'Common',
-          save_type: 'None',
-          traditions: ['Divine', 'Primal']
-        },
-        {
-          id: 3,
-          name: 'Detect Magic',
-          rank: 1,
-          spell_type: 'Cantrip',
-          rarity: 'Common',
-          save_type: 'None',
-          traditions: ['Arcane', 'Divine', 'Occult', 'Primal']
-        }
-      ]
-      setSpells(mockSpells)
+    setCurrentPage(1) // Reset to first page on new search
+    
+    try {
+      // For now, just fetch basic spells with traits and pagination
+      // TODO: Implement actual filtering logic in next step
+      const offset = (1 - 1) * SPELLS_PER_PAGE // First page
+      const spellsData = await fetchSpellsWithTraits({
+        limit: SPELLS_PER_PAGE,
+        offset: offset
+      })
+      
+      setSpells(spellsData)
+      
+      // Update total pages based on filtered results
+      // For now, using total spell count, but this will change when we implement filtering
+      if (spellCount) {
+        setTotalPages(Math.ceil(spellCount / SPELLS_PER_PAGE))
+      }
+    } catch (err) {
+      console.error('Failed to fetch spells:', err)
+      setSpells([])
+    } finally {
       setLoading(false)
-    }, 1000)
+    }
+  }
+
+  const handlePageChange = async (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return
+    
+    setCurrentPage(newPage)
+    setLoading(true)
+    
+    try {
+      const offset = (newPage - 1) * SPELLS_PER_PAGE
+      const spellsData = await fetchSpellsWithTraits({
+        limit: SPELLS_PER_PAGE,
+        offset: offset
+      })
+      
+      setSpells(spellsData)
+    } catch (err) {
+      console.error('Failed to fetch spells for page', newPage, ':', err)
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleTraditionChange = (tradition: string, state: TraditionState) => {
@@ -97,7 +114,7 @@ function App() {
     console.log('Previous traitStates:', traitStates)
     
     setTraitStates(prev => {
-      // If the trait is becoming unselected, remove it from state entirely
+      // If the trait is going to unselected, remove it from state entirely
       if (state === 'unselected') {
         const newState = { ...prev }
         delete newState[trait]
@@ -159,6 +176,9 @@ function App() {
               <SpellListOutput
                 spells={spells}
                 loading={loading}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
               />
             </div>
           </div>

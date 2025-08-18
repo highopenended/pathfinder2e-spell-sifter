@@ -33,22 +33,11 @@
 }
 
 .logic-btn {
-  background: var(--color-bg-secondary);
-  color: var(--color-text-muted);
-  border: 2px solid var(--color-border-primary);
-  padding: 8px 16px;
-  cursor: pointer;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 4px;
-  transition: all 0.1s ease;
+  /* Inherits from .btn-base in globals.css */
 }
 
 .logic-btn.active {
-  background: var(--color-btn-primary);
-  color: #fff;
-  border-color: var(--color-btn-primary);
+  /* Inherits from .btn-primary in globals.css */
 }
 
 .logic-btn:hover:not(.active) {
@@ -57,33 +46,17 @@
 }
 
 .tradition-btn {
-  background: var(--color-bg-primary);
-  color: var(--color-text-muted);
-  border: 2px solid var(--color-border-primary);
-  padding: 6px 12px;
-  cursor: pointer;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 600;
-  font-size: 12px;
-  border-radius: 4px;
-  transition: all 0.1s ease;
+  /* Inherits from .tag-base in globals.css */
   min-width: 70px;
   text-align: center;
-  box-shadow: 0 1px 3px var(--color-shadow-light);
 }
 
 .tradition-btn.include {
-  background: var(--color-success);
-  color: #fff;
-  border-color: var(--color-success-border);
-  box-shadow: 0 2px 4px var(--color-shadow-success);
+  /* Inherits from .tag-include in globals.css */
 }
 
 .tradition-btn.exclude {
-  background: var(--color-danger);
-  color: #fff;
-  border-color: var(--color-danger-border);
-  box-shadow: 0 2px 4px var(--color-shadow-danger);
+  /* Inherits from .tag-exclude in globals.css */
 }
 
 .tradition-btn:hover {

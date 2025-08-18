@@ -1,0 +1,40 @@
+.spell-card {
+  background: var(--color-white);
+  border: 2px solid var(--color-border-primary);
+  padding: 16px;
+  border-radius: var(--border-radius-large);
+  transition: var(--transition-medium);
+  text-align: left;
+}
+
+.spell-card:hover {
+  border-color: var(--color-border-secondary);
+  box-shadow: 0 2px 8px var(--color-shadow-light);
+  transform: translateY(-1px);
+}
+
+.spell-name {
+  font-weight: 700;
+  color: var(--color-text-primary);
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.spell-details {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.spell-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.trait-tag.tag-base.tag-readonly {
+  /* All styles are inherited from .tag-base and .tag-readonly in globals.css */
+  cursor: help; /* Indicates tooltip is available */
+}

@@ -61,9 +61,9 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
 
   const getTraitClass = (traitName: string) => {
     const state = traitStates[traitName] || 'unselected'
-    if (state === 'include') return 'trait-btn include'
-    if (state === 'exclude') return 'trait-btn exclude'
-    return 'trait-btn'
+    if (state === 'include') return 'trait-btn tag-base tag-include'
+    if (state === 'exclude') return 'trait-btn tag-base tag-exclude'
+    return 'trait-btn tag-base'
   }
 
   const clearAllTraits = () => {
@@ -130,20 +130,20 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
         <div className="header-controls">
           <div className="logic-toggle">
             <button 
-              className={`logic-btn ${logicMode === 'AND' ? 'active' : ''}`}
+              className={`logic-btn btn-base ${logicMode === 'AND' ? 'btn-primary' : ''}`}
               onClick={() => onLogicChange('AND')}
             >
               AND
             </button>
             <button 
-              className={`logic-btn ${logicMode === 'OR' ? 'active' : ''}`}
+              className={`logic-btn btn-base ${logicMode === 'OR' ? 'btn-primary' : ''}`}
               onClick={() => onLogicChange('OR')}
             >
               OR
             </button>
           </div>
           <button 
-            className="collapse-btn"
+            className="collapse-btn btn-base btn-neutral"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
             {isCollapsed ? '▼' : '▲'}
@@ -165,7 +165,7 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
             </div>
             <button 
               onClick={clearAllTraits}
-              className="clear-all-btn"
+              className="clear-all-btn btn-base btn-danger"
               disabled={activeTraitCount === 0}
             >
               Clear All

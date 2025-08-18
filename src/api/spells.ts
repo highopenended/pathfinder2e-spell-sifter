@@ -65,6 +65,70 @@ export const fetchSpells = async (options?: {
   }
 }
 
+// Fetch spells with traits for display in spell cards
+export const fetchSpellsWithTraits = async (options?: {
+  limit?: number
+  offset?: number
+  rank?: number
+  spellType?: SpellType
+  rarity?: RarityType
+}): Promise<SpellWithJoins[]> => {
+  try {
+    let query = supabase
+      .from('spells')
+      .select(`
+        *,
+        spell_traits(
+          traits(id, name, description)
+        ),
+        spell_traditions(
+          traditions(id, name)
+        ),
+        sources(id, book, page)
+      `)
+      .order('name')
+
+    if (options?.limit) {
+      query = query.limit(options.limit)
+    }
+    
+    if (options?.offset) {
+      query = query.range(options.offset, (options.offset + (options.limit || 50)) - 1)
+    }
+    
+    if (options?.rank !== undefined) {
+      query = query.eq('rank', options.rank)
+    }
+    
+    if (options?.spellType) {
+      query = query.eq('spell_type', options.spellType)
+    }
+    
+    if (options?.rarity) {
+      query = query.eq('rarity', options.rarity)
+    }
+
+    const { data, error } = await query
+
+    if (error) throw error
+
+    // Transform the data to match our SpellWithJoins interface
+    return (data || []).map(spell => ({
+      ...spell,
+      spell_traits: spell.spell_traits?.map((st: { traits: { id: number; name: string; description: string } }) => ({
+        traits: st.traits
+      })) || [],
+      spell_traditions: spell.spell_traditions?.map((st: { traditions: { id: number; name: string } }) => ({
+        traditions: st.traditions
+      })) || [],
+      sources: spell.sources
+    })) as SpellWithJoins[]
+  } catch (err) {
+    console.error('Failed to fetch spells with traits:', err)
+    return []
+  }
+}
+
 // Fetch spell by ID with full details (traits, traditions, source)
 export const fetchSpellById = async (id: number): Promise<SpellDetail | null> => {
   try {

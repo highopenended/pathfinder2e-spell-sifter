@@ -31,22 +31,11 @@
 }
 
 .logic-btn {
-  background: var(--color-bg-secondary);
-  color: var(--color-text-muted);
-  border: 2px solid var(--color-border-primary);
-  padding: 6px 12px;
-  cursor: pointer;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 600;
-  font-size: 12px;
-  border-radius: 4px;
-  transition: all 0.1s ease;
+  /* Inherits from .btn-base in globals.css */
 }
 
 .logic-btn.active {
-  background: var(--color-btn-primary);
-  color: #fff;
-  border-color: var(--color-btn-primary);
+  /* Inherits from .btn-primary in globals.css */
 }
 
 .logic-btn:hover:not(.active) {
@@ -55,16 +44,7 @@
 }
 
 .collapse-btn {
-  background: var(--color-neutral);
-  color: #fff;
-  border: 2px solid var(--color-neutral);
-  padding: 6px 12px;
-  cursor: pointer;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 600;
-  font-size: 12px;
-  border-radius: 4px;
-  transition: all 0.1s ease;
+  /* Inherits from .btn-neutral in globals.css */
   min-width: 40px;
 }
 
@@ -95,29 +75,20 @@
   border: 2px solid var(--color-border-primary);
   color: var(--color-text-primary);
   padding: 8px 12px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--font-family-primary);
   font-size: 14px;
-  border-radius: 6px;
-  transition: border-color 0.1s ease;
+  border-radius: var(--border-radius-medium);
+  transition: border-color var(--transition-fast);
 }
 
 .trait-search-input:focus {
   outline: none;
   border-color: var(--color-border-accent);
-  box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.1);
+  box-shadow: 0 0 0 3px var(--color-shadow-light);
 }
 
 .clear-all-btn {
-  background: var(--color-danger);
-  color: #fff;
-  border: 2px solid var(--color-danger);
-  padding: 8px 16px;
-  cursor: pointer;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 6px;
-  transition: all 0.1s ease;
+  /* Inherits from .btn-danger in globals.css */
   white-space: nowrap;
 }
 
@@ -136,7 +107,7 @@
   overflow-y: auto;
   overflow-x: hidden;
   border: 2px solid var(--color-border-primary);
-  border-radius: 8px;
+  border-radius: var(--border-radius-large);
   background: var(--color-bg-primary);
 }
 
@@ -148,58 +119,17 @@
   min-height: 50px;
 }
 
-.trait-btn {
-  background: var(--color-bg-primary);
-  color: var(--color-text-muted);
-  border: 2px solid var(--color-border-primary);
-  padding: 6px 12px;
-  cursor: pointer;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 600;
-  font-size: 12px;
-  border-radius: 4px;
-  transition: all 0.1s ease;
-  white-space: nowrap;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 1px 3px var(--color-shadow-light);
+/* Trait buttons now properly use shared tag styles */
+.trait-btn.tag-base {
+  /* All base styles are inherited from .tag-base in globals.css */
 }
 
-.trait-btn.include {
-  background: var(--color-success);
-  color: #fff;
-  border-color: var(--color-success-border);
-  box-shadow: 0 2px 4px var(--color-shadow-success);
+.trait-btn.tag-base.tag-include {
+  /* All include styles are inherited from .tag-include in globals.css */
 }
 
-.trait-btn.exclude {
-  background: var(--color-danger);
-  color: #fff;
-  border-color: var(--color-danger-border);
-  box-shadow: 0 2px 4px var(--color-shadow-danger);
-}
-
-.trait-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 6px var(--color-shadow-medium);
-}
-
-.trait-btn.include:hover {
-  background: var(--color-success-hover);
-  border-color: var(--color-success-hover);
-  box-shadow: 0 3px 6px var(--color-shadow-success-hover);
-}
-
-.trait-btn.exclude:hover {
-  background: var(--color-danger-hover);
-  border-color: var(--color-danger-hover);
-  box-shadow: 0 3px 6px var(--color-shadow-danger-hover);
-}
-
-.trait-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 2px var(--color-shadow-light);
+.trait-btn.tag-base.tag-exclude {
+  /* All exclude styles are inherited from .tag-exclude in globals.css */
 }
 
 /* Custom scrollbar for webkit browsers */
@@ -209,12 +139,12 @@
 
 .trait-pills-container::-webkit-scrollbar-track {
   background: var(--color-bg-secondary);
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
 }
 
 .trait-pills-container::-webkit-scrollbar-thumb {
   background: var(--color-border-secondary);
-  border-radius: 4px;
+  border-radius: var(--border-radius-small);
 }
 
 .trait-pills-container::-webkit-scrollbar-thumb:hover {

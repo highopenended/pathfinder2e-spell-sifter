@@ -1,24 +1,23 @@
 import React from 'react'
 import './SpellListOutput.css'
-
-interface Spell {
-  id: number
-  name: string
-  rank: number
-  spell_type: string
-  rarity: string
-  save_type: string
-  is_custom?: boolean
-  is_favorite?: boolean
-  traditions?: string[]
-}
+import type { SpellWithJoins } from '../../types/spell'
+import SpellCard from '../spellCards/SpellCard'
 
 interface SpellListOutputProps {
-  spells: Spell[]
+  spells: SpellWithJoins[]
   loading: boolean
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
 }
 
-const SpellListOutput: React.FC<SpellListOutputProps> = ({ spells, loading }) => {
+const SpellListOutput: React.FC<SpellListOutputProps> = ({ 
+  spells, 
+  loading, 
+  currentPage, 
+  totalPages, 
+  onPageChange 
+}) => {
   if (loading) {
     return (
       <div className="spell-list-output">
@@ -35,27 +34,60 @@ const SpellListOutput: React.FC<SpellListOutputProps> = ({ spells, loading }) =>
     )
   }
 
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      onPageChange(newPage)
+    }
+  }
+
   return (
     <div className="spell-list-output">
       <div className="results-header">
         <h3>Results ({spells.length} spells)</h3>
+        {totalPages > 1 && (
+          <div className="pagination-info">
+            Page {currentPage} of {totalPages}
+          </div>
+        )}
       </div>
+      
       <div className="spell-list">
         {spells.map(spell => (
-          <div key={spell.id} className="spell-item">
-            <div className="spell-name">{spell.name}</div>
-            <div className="spell-details">
-              {spell.rank === 0 ? 'Cantrip' : `Rank ${spell.rank}`} • {spell.spell_type} • {spell.rarity} • {spell.save_type}
-              {spell.is_custom && <span className="custom-tag">Custom</span>}
-            </div>
-            {spell.traditions && spell.traditions.length > 0 && (
-              <div className="spell-traditions">
-                {spell.traditions.join(', ')}
-              </div>
-            )}
-          </div>
+          <SpellCard key={spell.id} spell={spell} />
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <div className="pagination-controls">
+          <button 
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage <= 1}
+            className="pagination-btn btn-base btn-secondary"
+          >
+            Previous
+          </button>
+          
+          <div className="page-numbers">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+              <button
+                key={pageNum}
+                onClick={() => handlePageChange(pageNum)}
+                className={`pagination-btn btn-base btn-secondary ${pageNum === currentPage ? 'active' : ''}`}
+              >
+                {pageNum}
+              </button>
+            ))}
+          </div>
+          
+          <button 
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage >= totalPages}
+            className="pagination-btn btn-base btn-secondary"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   )
 }
