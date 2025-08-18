@@ -27,13 +27,6 @@
   line-height: 1.4;
 }
 
-.spell-traits {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 8px;
-}
-
 /* Component-specific styling for trait tags */
 .spell-traits .tag-base.tag-readonly {
   cursor: help; /* Indicates tooltip is available */

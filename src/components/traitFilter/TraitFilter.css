@@ -117,3 +117,25 @@
 .trait-pills-container::-webkit-scrollbar-thumb:hover {
   background: var(--color-border-accent);
 }
+
+/* Trait Summary Display */
+.trait-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.summary-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  min-width: 60px;
+}

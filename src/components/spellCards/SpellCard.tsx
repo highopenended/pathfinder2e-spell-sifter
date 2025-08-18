@@ -15,11 +15,11 @@ const SpellCard: React.FC<SpellCardProps> = ({ spell }) => {
       </div>
       
       {spell.spell_traits && spell.spell_traits.length > 0 && (
-        <div className="spell-traits">
+        <div className="spell-traits tiny-trait-pills">
           {spell.spell_traits.map(({ traits }) => (
             <span
               key={traits.id}
-              className="trait-tag tag-base tag-readonly"
+              className="tag-base tag-readonly"
               title={traits.description || traits.name}
             >
               {traits.name}

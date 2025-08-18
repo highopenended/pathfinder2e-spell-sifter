@@ -108,6 +108,48 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
 
   const activeTraitCount = Object.values(traitStates).filter(state => state !== 'unselected').length
 
+  // Create summary display for active traits
+  const traitSummary = useMemo(() => {
+    const includeTraits: string[] = []
+    const excludeTraits: string[] = []
+    
+    Object.entries(traitStates).forEach(([traitName, state]) => {
+      if (state === 'include') {
+        includeTraits.push(traitName)
+      } else if (state === 'exclude') {
+        excludeTraits.push(traitName)
+      }
+    })
+    
+    // Sort alphabetically
+    includeTraits.sort()
+    excludeTraits.sort()
+    
+    return { includeTraits, excludeTraits }
+  }, [traitStates])
+
+  const renderTraitSummary = (traits: string[], state: 'include' | 'exclude', maxVisible: number = 5) => {
+    if (traits.length === 0) return null
+    
+    const visibleTraits = traits.slice(0, maxVisible)
+    const remainingCount = traits.length - maxVisible
+    
+    return (
+      <div className="tiny-trait-pills">
+        {visibleTraits.map(traitName => (
+          <span key={traitName} className={`tag-base tag-${state}`}>
+            {traitName}
+          </span>
+        ))}
+        {remainingCount > 0 && (
+          <span className={`tag-base tag-${state}`}>
+            +{remainingCount} others
+          </span>
+        )}
+      </div>
+    )
+  }
+
   if (loading) {
     return (
       <div className="trait-filter">
@@ -140,6 +182,24 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Trait Summary Display */}
+      {(traitSummary.includeTraits.length > 0 || traitSummary.excludeTraits.length > 0) && (
+        <div className="trait-summary">
+          {traitSummary.includeTraits.length > 0 && (
+            <div className="summary-section">
+              <span className="summary-label">Include:</span>
+              {renderTraitSummary(traitSummary.includeTraits, 'include')}
+            </div>
+          )}
+          {traitSummary.excludeTraits.length > 0 && (
+            <div className="summary-section">
+              <span className="summary-label">Exclude:</span>
+              {renderTraitSummary(traitSummary.excludeTraits, 'exclude')}
+            </div>
+          )}
+        </div>
+      )}
 
       {!isCollapsed && (
         <>
