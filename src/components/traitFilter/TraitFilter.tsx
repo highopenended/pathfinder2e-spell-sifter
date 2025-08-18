@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import './TraitFilter.css'
-import { fetchTraits, type Trait } from '../../lib/traits'
+import { fetchTraits } from '../../api/traits'
+import { type Trait } from '../../types/traits'
 
 export type TraitState = 'unselected' | 'include' | 'exclude'
 

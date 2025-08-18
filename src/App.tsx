@@ -7,7 +7,7 @@ import TraitFilter from './components/traitFilter/TraitFilter'
 import type { TraitState } from './components/traitFilter/TraitFilter'
 import SpellListOutput from './components/spellListOutput/SpellListOutput'
 import { DatabaseTest } from './components/DatabaseTest'
-import { supabase } from './lib/supabase'
+import { fetchSpellCount } from './api/spells'
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -26,25 +26,16 @@ function App() {
 
   // Debug: Fetch spell count on component mount
   useEffect(() => {
-    const fetchSpellCount = async () => {
+    const getSpellCount = async () => {
       try {
-        console.log('Fetching spell count...')
-        const { count, error } = await supabase
-          .from('spells')
-          .select('*', { count: 'exact', head: true })
-
-        if (error) {
-          console.error('Error fetching spell count:', error)
-      } else {
-          console.log('Spell count:', count)
-          setSpellCount(count)
-        }
+        const count = await fetchSpellCount()
+        setSpellCount(count)
       } catch (err) {
         console.error('Failed to fetch spell count:', err)
       }
     }
 
-    fetchSpellCount()
+    getSpellCount()
   }, [])
 
   const handleSearch = () => {
