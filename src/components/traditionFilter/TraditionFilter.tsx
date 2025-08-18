@@ -1,8 +1,7 @@
 import React from 'react'
 import './TraditionFilter.css'
 import AndOrBtnGroup from '../andOrBtnGroup/AndOrBtnGroup'
-
-export type TraditionState = 'unselected' | 'include' | 'exclude'
+import type { TraditionState } from '../../App'
 
 interface TraditionFilterProps {
   traditionStates: Record<string, TraditionState>

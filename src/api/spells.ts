@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase'
 import type { SpellRow, SpellDetail, SpellWithJoins } from '../types/spell'
+import type { TraditionState, TraitState } from '../App'
 import { SpellType, RarityType } from '../types/enums'
 
 // Fetch total count of spells in database
@@ -17,6 +18,68 @@ export const fetchSpellCount = async (): Promise<number | null> => {
     }
   } catch (err) {
     console.error('Failed to fetch spell count:', err)
+    return null
+  }
+}
+
+// Fetch count of filtered spells
+export const fetchFilteredSpellCount = async (options?: {
+  searchTerm?: string
+  traditionStates?: Record<string, TraditionState>
+  traitStates?: Record<string, TraitState>
+  traditionLogicMode?: 'AND' | 'OR'
+  traitLogicMode?: 'AND' | 'OR'
+}): Promise<number | null> => {
+  try {
+    let query = supabase
+      .from('v_spells_extended')
+      .select('id', { count: 'exact', head: true })
+
+    // Apply name search
+    if (options?.searchTerm && options.searchTerm.trim()) {
+      query = query.ilike('name', `%${options.searchTerm.trim()}%`)
+    }
+
+    // Apply tradition filtering
+    if (options?.traditionStates) {
+      const selectedTraditions = Object.entries(options.traditionStates)
+        .filter(([_, state]) => state === 'include')
+        .map(([name, _]) => name)
+
+      if (selectedTraditions.length > 0) {
+        if (options.traditionLogicMode === 'AND') {
+          query = query.contains('tradition_names', selectedTraditions)
+        } else {
+          query = query.overlaps('tradition_names', selectedTraditions)
+        }
+      }
+    }
+
+    // Apply trait filtering
+    if (options?.traitStates) {
+      const selectedTraits = Object.entries(options.traitStates)
+        .filter(([_, state]) => state === 'include')
+        .map(([name, _]) => name)
+
+      if (selectedTraits.length > 0) {
+        if (options.traitLogicMode === 'AND') {
+          query = query.contains('trait_names', selectedTraits)
+        } else {
+          query = query.overlaps('trait_names', selectedTraits)
+        }
+      }
+    }
+
+    const { count, error } = await query
+    if (error) {
+      console.error('Error fetching filtered spell count:', error)
+      return null
+    } else {
+      console.log('Filtered spell count:', count)
+      return count as number
+    }
+  } catch (err) {
+    console.error('Failed to fetch filtered spell count:', err)
     return null
   }
 }
@@ -72,22 +135,21 @@ export const fetchSpellsWithTraits = async (options?: {
   rank?: number
   spellType?: SpellType
   rarity?: RarityType
+  // Search criteria
+  searchTerm?: string
+  traditionStates?: Record<string, TraditionState>
+  traitStates?: Record<string, TraitState>
+  traditionLogicMode?: 'AND' | 'OR'
+  traitLogicMode?: 'AND' | 'OR'
 }): Promise<SpellWithJoins[]> => {
   try {
+    // Use the optimized view instead of manual JOINs
     let query = supabase
-      .from('spells')
-      .select(`
-        *,
-        spell_traits(
-          traits(id, name, description)
-        ),
-        spell_traditions(
-          traditions(id, name)
-        ),
-        sources(id, book, page)
-      `)
+      .from('v_spells_extended')
+      .select('*')
       .order('name')
 
+    // Apply pagination
     if (options?.limit) {
       query = query.limit(options.limit)
     }
@@ -96,6 +158,7 @@ export const fetchSpellsWithTraits = async (options?: {
       query = query.range(options.offset, (options.offset + (options.limit || 50)) - 1)
     }
     
+    // Apply basic filters
     if (options?.rank !== undefined) {
       query = query.eq('rank', options.rank)
     }
@@ -108,20 +171,82 @@ export const fetchSpellsWithTraits = async (options?: {
       query = query.eq('rarity', options.rarity)
     }
 
+    // Apply name search
+    if (options?.searchTerm && options.searchTerm.trim()) {
+      query = query.ilike('name', `%${options.searchTerm.trim()}%`)
+    }
+
+    // Apply tradition filtering
+    if (options?.traditionStates) {
+      const selectedTraditions = Object.entries(options.traditionStates)
+        .filter(([_, state]) => state === 'include')
+        .map(([name, _]) => name)
+
+      if (selectedTraditions.length > 0) {
+        if (options.traditionLogicMode === 'AND') {
+          // ALL traditions (contains)
+          query = query.contains('tradition_names', selectedTraditions)
+        } else {
+          // ANY traditions (overlaps)
+          query = query.overlaps('tradition_names', selectedTraditions)
+        }
+      }
+    }
+
+    // Apply trait filtering
+    if (options?.traitStates) {
+      const selectedTraits = Object.entries(options.traitStates)
+        .filter(([_, state]) => state === 'include')
+        .map(([name, _]) => name)
+
+      if (selectedTraits.length > 0) {
+        if (options.traitLogicMode === 'AND') {
+          // ALL traits (contains)
+          query = query.contains('trait_names', selectedTraits)
+        } else {
+          // ANY traits (overlaps)
+          query = query.overlaps('trait_names', selectedTraits)
+        }
+      }
+    }
+
     const { data, error } = await query
 
     if (error) throw error
 
-    // Transform the data to match our SpellWithJoins interface
+    // Transform the view data to match our SpellWithJoins interface
     return (data || []).map(spell => ({
-      ...spell,
-      spell_traits: spell.spell_traits?.map((st: { traits: { id: number; name: string; description: string } }) => ({
-        traits: st.traits
+      id: spell.id,
+      name: spell.name,
+      rank: spell.rank,
+      spell_type: spell.spell_type,
+      save_type: spell.save_type,
+      rarity: spell.rarity,
+      action_category: spell.action_category,
+      actions_min: spell.actions_min,
+      actions_max: spell.actions_max,
+      description: spell.description,
+      source_id: spell.source_id,
+      created_at: spell.created_at,
+      updated_at: spell.updated_at,
+      spell_traits: spell.trait_names?.map((name: string, index: number) => ({
+        traits: {
+          id: spell.trait_ids?.[index] || 0,
+          name: name,
+          description: '' // View doesn't include descriptions, would need separate query if needed
+        }
       })) || [],
-      spell_traditions: spell.spell_traditions?.map((st: { traditions: { id: number; name: string } }) => ({
-        traditions: st.traditions
+      spell_traditions: spell.tradition_names?.map((name: string, index: number) => ({
+        traditions: {
+          id: spell.tradition_ids?.[index] || 0,
+          name: name
+        }
       })) || [],
-      sources: spell.sources
+      sources: spell.book ? {
+        id: spell.source_id || 0,
+        book: spell.book,
+        page: spell.page
+      } : null
     })) as SpellWithJoins[]
   } catch (err) {
     console.error('Failed to fetch spells with traits:', err)

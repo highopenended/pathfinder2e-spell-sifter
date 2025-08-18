@@ -3,8 +3,7 @@ import './TraitFilter.css'
 import { fetchTraits } from '../../api/traits'
 import { type Trait } from '../../types/trait'
 import AndOrBtnGroup from '../andOrBtnGroup/AndOrBtnGroup'
-
-export type TraitState = 'unselected' | 'include' | 'exclude'
+import type { TraitState } from '../../App'
 
 interface TraitFilterProps {
   traitStates: Record<string, TraitState>

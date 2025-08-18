@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 import SpellNameSearch from './components/spellNameSearch/SpellNameSearch'
 import TraditionFilter from './components/traditionFilter/TraditionFilter'
-import type { TraditionState } from './components/traditionFilter/TraditionFilter'
 import TraitFilter from './components/traitFilter/TraitFilter'
-import type { TraitState } from './components/traitFilter/TraitFilter'
 import SpellListOutput from './components/spellListOutput/SpellListOutput'
 import { DatabaseTest } from './components/databaseTest/DatabaseTest'
-import { fetchSpellCount, fetchSpellsWithTraits } from './api/spells'
+import { fetchSpellCount, fetchSpellsWithTraits, fetchFilteredSpellCount } from './api/spells'
 import type { SpellWithJoins } from './types/spell'
+
+// State type definitions - centralized here for easy testing
+export type TraditionState = 'unselected' | 'include' | 'exclude'
+export type TraitState = 'unselected' | 'include' | 'exclude'
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -58,20 +60,31 @@ function App() {
     setCurrentPage(1) // Reset to first page on new search
     
     try {
-      // For now, just fetch basic spells with traits and pagination
-      // TODO: Implement actual filtering logic in next step
+      // Pass all search criteria to the API function
       const offset = (1 - 1) * SPELLS_PER_PAGE // First page
       const spellsData = await fetchSpellsWithTraits({
         limit: SPELLS_PER_PAGE,
-        offset: offset
+        offset: offset,
+        searchTerm: searchTerm,
+        traditionStates: traditionStates,
+        traitStates: traitStates,
+        traditionLogicMode: traditionLogicMode,
+        traitLogicMode: traitLogicMode
       })
       
       setSpells(spellsData)
       
-      // Update total pages based on filtered results
-      // For now, using total spell count, but this will change when we implement filtering
-      if (spellCount) {
-        setTotalPages(Math.ceil(spellCount / SPELLS_PER_PAGE))
+      // Get filtered count for proper pagination
+      const filteredCount = await fetchFilteredSpellCount({
+        searchTerm: searchTerm,
+        traditionStates: traditionStates,
+        traitStates: traitStates,
+        traditionLogicMode: traditionLogicMode,
+        traitLogicMode: traitLogicMode
+      })
+      
+      if (filteredCount !== null) {
+        setTotalPages(Math.ceil(filteredCount / SPELLS_PER_PAGE))
       }
     } catch (err) {
       console.error('Failed to fetch spells:', err)
@@ -91,7 +104,12 @@ function App() {
       const offset = (newPage - 1) * SPELLS_PER_PAGE
       const spellsData = await fetchSpellsWithTraits({
         limit: SPELLS_PER_PAGE,
-        offset: offset
+        offset: offset,
+        searchTerm: searchTerm,
+        traditionStates: traditionStates,
+        traitStates: traitStates,
+        traditionLogicMode: traditionLogicMode,
+        traitLogicMode: traitLogicMode
       })
       
       setSpells(spellsData)
