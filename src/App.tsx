@@ -19,7 +19,7 @@ function App() {
     'Primal': 'unselected'
   })
   const [traitStates, setTraitStates] = useState<Record<string, TraitState>>({})
-  const [logicMode, setLogicMode] = useState<'AND' | 'OR'>('OR')
+  const [traditionLogicMode, setTraditionLogicMode] = useState<'AND' | 'OR'>('OR')
   const [traitLogicMode, setTraitLogicMode] = useState<'AND' | 'OR'>('OR')
   const [loading, setLoading] = useState(false)
   const [spells, setSpells] = useState<SpellWithJoins[]>([])
@@ -51,7 +51,7 @@ function App() {
     console.log('Searching for:', searchTerm)
     console.log('Tradition states:', traditionStates)
     console.log('Trait states:', traitStates)
-    console.log('Tradition logic mode:', logicMode)
+    console.log('Tradition logic mode:', traditionLogicMode)
     console.log('Trait logic mode:', traitLogicMode)
     
     setLoading(true)
@@ -151,8 +151,8 @@ function App() {
               <TraditionFilter
                 traditionStates={traditionStates}
                 onTraditionChange={handleTraditionChange}
-                logicMode={logicMode}
-                onLogicChange={setLogicMode}
+                logicMode={traditionLogicMode}
+                onLogicChange={setTraditionLogicMode}
               />
                 </div>
             <div className="section-box">

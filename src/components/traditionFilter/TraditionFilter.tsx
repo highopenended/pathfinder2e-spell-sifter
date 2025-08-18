@@ -1,5 +1,6 @@
 import React from 'react'
 import './TraditionFilter.css'
+import AndOrBtnGroup from '../andOrBtnGroup/AndOrBtnGroup'
 
 export type TraditionState = 'unselected' | 'include' | 'exclude'
 
@@ -55,20 +56,10 @@ const TraditionFilter: React.FC<TraditionFilterProps> = ({
             </button>
           ))}
         </div>
-        <div className="logic-toggle">
-          <button 
-            className={`btn-base ${logicMode === 'AND' ? 'btn-primary' : ''}`}
-            onClick={() => onLogicChange('AND')}
-          >
-            AND
-          </button>
-          <button 
-            className={`btn-base ${logicMode === 'OR' ? 'btn-primary' : ''}`}
-            onClick={() => onLogicChange('OR')}
-          >
-            OR
-          </button>
-        </div>
+        <AndOrBtnGroup 
+          logicMode={logicMode}
+          onLogicChange={onLogicChange}
+        />
       </div>
     </div>
   )

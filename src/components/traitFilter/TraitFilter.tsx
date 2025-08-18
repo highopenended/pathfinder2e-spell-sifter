@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import './TraitFilter.css'
 import { fetchTraits } from '../../api/traits'
 import { type Trait } from '../../types/trait'
+import AndOrBtnGroup from '../andOrBtnGroup/AndOrBtnGroup'
 
 export type TraitState = 'unselected' | 'include' | 'exclude'
 
@@ -128,20 +129,10 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
           Traits: {activeTraitCount > 0 && `(${activeTraitCount} active)`}
         </span>
         <div className="header-controls">
-          <div className="logic-toggle">
-            <button 
-              className={`btn-base ${logicMode === 'AND' ? 'btn-primary' : ''}`}
-              onClick={() => onLogicChange('AND')}
-            >
-              AND
-            </button>
-            <button 
-              className={`btn-base ${logicMode === 'OR' ? 'btn-primary' : ''}`}
-              onClick={() => onLogicChange('OR')}
-            >
-              OR
-            </button>
-          </div>
+          <AndOrBtnGroup 
+            logicMode={logicMode}
+            onLogicChange={onLogicChange}
+          />
           <button 
             className="btn-base btn-neutral"
             onClick={() => setIsCollapsed(!isCollapsed)}

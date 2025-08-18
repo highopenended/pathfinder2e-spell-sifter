@@ -27,10 +27,7 @@
   align-items: center;
 }
 
-.logic-toggle {
-  display: flex;
-  gap: 4px;
-}
+
 
 .logic-btn.active {
   /* Inherits from .btn-primary in globals.css */

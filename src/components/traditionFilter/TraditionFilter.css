@@ -28,11 +28,7 @@
   justify-content: center;
 }
 
-.logic-toggle {
-  display: flex;
-  gap: 4px;
-  white-space: nowrap;
-}
+
 
 .tradition-btn {
   /* Inherits from .tag-base in globals.css */
