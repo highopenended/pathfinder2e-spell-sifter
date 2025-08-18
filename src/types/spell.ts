@@ -1,12 +1,14 @@
+import { SaveType, SpellType, RarityType, ActionCategory } from './enums'
+
 // Database row type - matches the spells table structure exactly
 export interface SpellRow {
   id: number
   name: string
   rank: number
-  spell_type: 'Cantrip' | 'Spell' | 'Focus' | 'Ritual'
-  save_type: 'Fortitude' | 'Reflex' | 'Will' | 'None'
-  rarity: 'Common' | 'Uncommon' | 'Rare' | 'Unique'
-  action_category: 'None' | 'Free' | 'Reaction' | 'Activity'
+  spell_type: SpellType
+  save_type: SaveType
+  rarity: RarityType
+  action_category: ActionCategory
   actions_min: number | null
   actions_max: number | null
   description: string | null
@@ -15,7 +17,28 @@ export interface SpellRow {
   updated_at: string
 }
 
-// Enriched model with related data from join tables
+// Raw Supabase join response - used internally for API functions
+export interface SpellWithJoins extends SpellRow {
+  spell_traits: Array<{
+    traits: {
+      id: number
+      name: string
+    }
+  }>
+  spell_traditions: Array<{
+    traditions: {
+      id: number
+      name: string
+    }
+  }>
+  sources: {
+    id: number
+    book: string
+    page: number | null
+  } | null
+}
+
+// Clean, user-friendly model - what we return from API functions
 export interface SpellDetail extends SpellRow {
   traits: { id: number; name: string }[]
   traditions: { id: number; name: string }[]

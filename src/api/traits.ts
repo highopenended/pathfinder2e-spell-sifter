@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase'
-import type { Trait } from '../types/traits'
+import type { Trait } from '../types/trait'
 
 let cachedTraits: Trait[] | null = null
 

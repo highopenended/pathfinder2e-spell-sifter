@@ -1,27 +1,19 @@
 import { supabase } from '../lib/supabase'
-import type { SpellRow, SpellDetail } from '../types/spell'
+import type { SpellRow, SpellDetail, SpellWithJoins } from '../types/spell'
+import { SpellType, RarityType } from '../types/enums'
 
 // Fetch total count of spells in database
-let cachedSpellCount: number | null = null
-
 export const fetchSpellCount = async (): Promise<number | null> => {
-  if (cachedSpellCount !== null) {
-    return cachedSpellCount
-  }
-
   try {
-    console.log('Fetching spell count...')
     const { count, error } = await supabase
       .from('spells')
       .select('*', { count: 'exact', head: true })
-
     if (error) {
       console.error('Error fetching spell count:', error)
       return null
     } else {
       console.log('Spell count:', count)
-      cachedSpellCount = count
-      return count
+      return count as number
     }
   } catch (err) {
     console.error('Failed to fetch spell count:', err)
@@ -34,8 +26,8 @@ export const fetchSpells = async (options?: {
   limit?: number
   offset?: number
   rank?: number
-  spellType?: string
-  rarity?: string
+  spellType?: SpellType
+  rarity?: RarityType
 }): Promise<SpellRow[]> => {
   try {
     let query = supabase
@@ -66,7 +58,7 @@ export const fetchSpells = async (options?: {
     const { data, error } = await query
 
     if (error) throw error
-    return data || []
+    return (data || []) as SpellRow[]
   } catch (err) {
     console.error('Failed to fetch spells:', err)
     return []
@@ -89,7 +81,7 @@ export const fetchSpellById = async (id: number): Promise<SpellDetail | null> =>
         sources(id, book, page)
       `)
       .eq('id', id)
-      .single()
+      .single<SpellWithJoins>()
 
     if (error) throw error
 
@@ -98,8 +90,8 @@ export const fetchSpellById = async (id: number): Promise<SpellDetail | null> =>
     // Transform the data to match our SpellDetail interface
     const spell: SpellDetail = {
       ...data,
-      traits: data.spell_traits?.map((st: any) => st.traits) || [],
-      traditions: data.spell_traditions?.map((st: any) => st.traditions) || [],
+      traits: data.spell_traits.map((st) => st.traits),
+      traditions: data.spell_traditions.map((st) => st.traditions),
       source: data.sources ? {
         id: data.sources.id,
         book: data.sources.book,
