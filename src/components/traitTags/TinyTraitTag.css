@@ -37,7 +37,6 @@
   background: var(--color-bg-secondary);
   color: var(--color-text-secondary);
   border-color: var(--color-border-secondary);
-  cursor: help;
 }
 
 /* Container for tiny tags */

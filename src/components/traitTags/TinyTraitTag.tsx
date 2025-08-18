@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import './TinyTraitTag.css'
+import TraitTooltip from './TraitTooltip'
 
 interface TinyTraitTagProps {
   name: string
@@ -14,6 +15,9 @@ const TinyTraitTag: React.FC<TinyTraitTagProps> = ({
   description,
   className = ''
 }) => {
+  const [showTooltip, setShowTooltip] = useState(false)
+  const tagRef = useRef<HTMLSpanElement>(null)
+
   const getTagClass = () => {
     if (state === 'include') return 'tiny-tag-base tiny-tag-include'
     if (state === 'exclude') return 'tiny-tag-base tiny-tag-exclude'
@@ -22,12 +26,23 @@ const TinyTraitTag: React.FC<TinyTraitTagProps> = ({
   }
 
   return (
-    <span
-      className={`${getTagClass()} ${className}`.trim()}
-      title={description}
-    >
-      {name}
-    </span>
+    <>
+      <span
+        ref={tagRef}
+        className={`${getTagClass()} ${className}`.trim()}
+        onMouseEnter={() => setShowTooltip(true)}
+        onMouseLeave={() => setShowTooltip(false)}
+      >
+        {name}
+      </span>
+      {description && description.trim() !== '' && (
+        <TraitTooltip
+          content={description}
+          isVisible={showTooltip}
+          targetRef={tagRef}
+        />
+      )}
+    </>
   )
 }
 

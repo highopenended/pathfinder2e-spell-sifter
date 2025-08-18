@@ -50,12 +50,6 @@ function App() {
   }, [])
 
   const handleSearch = async () => {
-    console.log('Searching for:', searchTerm)
-    console.log('Tradition states:', traditionStates)
-    console.log('Trait states:', traitStates)
-    console.log('Tradition logic mode:', traditionLogicMode)
-    console.log('Trait logic mode:', traitLogicMode)
-    
     setLoading(true)
     setCurrentPage(1) // Reset to first page on new search
     
@@ -128,15 +122,12 @@ function App() {
   }
 
   const handleTraitChange = (trait: string, state: TraitState) => {
-    console.log(`Trait ${trait} changing to state: ${state}`)
-    console.log('Previous traitStates:', traitStates)
     
     setTraitStates(prev => {
       // If the trait is going to unselected, remove it from state entirely
       if (state === 'unselected') {
         const newState = { ...prev }
         delete newState[trait]
-        console.log('New traitStates (removed unselected):', newState)
         return newState
       }
       
@@ -145,7 +136,6 @@ function App() {
         ...prev,
         [trait]: state
       }
-      console.log('New traitStates (updated):', newState)
       return newState
     })
   }

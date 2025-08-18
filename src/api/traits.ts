@@ -17,7 +17,6 @@ export const fetchTraits = async (): Promise<Trait[]> => {
     if (error) throw error
 
     cachedTraits = data || []
-    console.log('Successfully fetched traits:', cachedTraits.length)
     return cachedTraits
   } catch (err) {
     console.error('Failed to fetch traits:', err)

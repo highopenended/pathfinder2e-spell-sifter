@@ -13,7 +13,6 @@ export const fetchSpellCount = async (): Promise<number | null> => {
       console.error('Error fetching spell count:', error)
       return null
     } else {
-      console.log('Spell count:', count)
       return count as number
     }
   } catch (err) {
@@ -75,7 +74,6 @@ export const fetchFilteredSpellCount = async (options?: {
       console.error('Error fetching filtered spell count:', error)
       return null
     } else {
-      console.log('Filtered spell count:', count)
       return count as number
     }
   } catch (err) {
@@ -214,6 +212,26 @@ export const fetchSpellsWithTraits = async (options?: {
 
     if (error) throw error
 
+    // Fetch trait descriptions for all unique trait names
+    const allTraitNames = [...new Set(
+      (data || []).flatMap(spell => spell.trait_names || [])
+    )]
+    
+    let traitDescriptions: Record<string, string> = {}
+    if (allTraitNames.length > 0) {
+      const { data: traitsData, error: traitsError } = await supabase
+        .from('traits')
+        .select('name, description')
+        .in('name', allTraitNames)
+      
+      if (!traitsError && traitsData) {
+        traitDescriptions = traitsData.reduce((acc, trait) => {
+          acc[trait.name] = trait.description || 'No description available'
+          return acc
+        }, {} as Record<string, string>)
+      }
+    }
+
     // Transform the view data to match our SpellWithJoins interface
     return (data || []).map(spell => ({
       id: spell.id,
@@ -233,7 +251,7 @@ export const fetchSpellsWithTraits = async (options?: {
         traits: {
           id: spell.trait_ids?.[index] || 0,
           name: name,
-          description: '' // View doesn't include descriptions, would need separate query if needed
+          description: traitDescriptions[name] || 'No description available'
         }
       })) || [],
       spell_traditions: spell.tradition_names?.map((name: string, index: number) => ({

@@ -1,0 +1,51 @@
+.trait-tooltip {
+  position: fixed;
+  z-index: 1000;
+  max-width: 600px;
+  background: rgba(248, 249, 250, 0.95);
+  border: 2px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-medium);
+  box-shadow: var(--color-shadow-heavy);
+  pointer-events: none;
+  opacity: 0;
+  animation: tooltip-fade-in 0.2s ease-out forwards;
+}
+
+.trait-tooltip__content {
+  padding: 6px 10px;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-size: 13px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Animation */
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Hover effect for the tooltip itself (though pointer events are disabled) */
+.trait-tooltip:hover {
+  box-shadow: var(--color-shadow-heavy), 0 0 0 1px var(--color-border-accent);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .trait-tooltip {
+    max-width: 250px;
+  }
+  
+  .trait-tooltip__content {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+}

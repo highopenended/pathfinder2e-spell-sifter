@@ -83,25 +83,29 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
 
   // Create summary display for active traits
   const traitSummary = useMemo(() => {
-    const includeTraits: string[] = []
-    const excludeTraits: string[] = []
+    const includeTraits: { name: string; description: string }[] = []
+    const excludeTraits: { name: string; description: string }[] = []
     
     Object.entries(traitStates).forEach(([traitName, state]) => {
-      if (state === 'include') {
-        includeTraits.push(traitName)
-      } else if (state === 'exclude') {
-        excludeTraits.push(traitName)
+      // Find the trait object to get the description
+      const trait = traits.find(t => t.name === traitName)
+      if (trait) {
+        if (state === 'include') {
+          includeTraits.push({ name: traitName, description: trait.description })
+        } else if (state === 'exclude') {
+          excludeTraits.push({ name: traitName, description: trait.description })
+        }
       }
     })
     
     // Sort alphabetically
-    includeTraits.sort()
-    excludeTraits.sort()
+    includeTraits.sort((a, b) => a.name.localeCompare(b.name))
+    excludeTraits.sort((a, b) => a.name.localeCompare(b.name))
     
     return { includeTraits, excludeTraits }
-  }, [traitStates])
+  }, [traitStates, traits])
 
-  const renderTraitSummary = (traits: string[], state: 'include' | 'exclude', maxVisible: number = 5) => {
+  const renderTraitSummary = (traits: { name: string; description: string }[], state: 'include' | 'exclude', maxVisible: number = 5) => {
     if (traits.length === 0) return null
     
     const visibleTraits = traits.slice(0, maxVisible)
@@ -109,11 +113,12 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
     
     return (
       <div className="tiny-trait-pills">
-        {visibleTraits.map(traitName => (
+        {visibleTraits.map(trait => (
           <TinyTraitTag
-            key={traitName}
-            name={traitName}
+            key={trait.name}
+            name={trait.name}
             state={state}
+            description={trait.description}
           />
         ))}
         {remainingCount > 0 && (
