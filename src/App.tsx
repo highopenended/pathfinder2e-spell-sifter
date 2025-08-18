@@ -6,6 +6,7 @@ import type { TraditionState } from './components/traditionFilter/TraditionFilte
 import TraitFilter from './components/traitFilter/TraitFilter'
 import type { TraitState } from './components/traitFilter/TraitFilter'
 import SpellListOutput from './components/spellListOutput/SpellListOutput'
+import { DatabaseTest } from './components/DatabaseTest'
 import { supabase } from './lib/supabase'
 
 function App() {
@@ -153,6 +154,9 @@ function App() {
                 logicMode={traitLogicMode}
                 onLogicChange={setTraitLogicMode}
               />
+            </div>
+            <div className="section-box">
+              <DatabaseTest />
             </div>
           </div>
         </div>
