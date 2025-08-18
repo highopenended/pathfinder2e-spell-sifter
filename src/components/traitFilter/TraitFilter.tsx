@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import './TraitFilter.css'
+import '../traitTags/TraitTag.css'
 import { fetchTraits } from '../../api/traits'
 import { type Trait } from '../../types/trait'
 import AndOrBtnGroup from '../andOrBtnGroup/AndOrBtnGroup'
+import TraitTag from '../traitTags/TraitTag'
+import TinyTraitTag from '../traitTags/TinyTraitTag'
 import type { TraitState } from '../../App'
 
 interface TraitFilterProps {
@@ -59,13 +62,6 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
     }
   }
 
-  const getTraitClass = (traitName: string) => {
-    const state = traitStates[traitName] || 'unselected'
-    if (state === 'include') return 'tag-base tag-include'
-    if (state === 'exclude') return 'tag-base tag-exclude'
-    return 'tag-base'
-  }
-
   const clearAllTraits = () => {
     traits.forEach(trait => {
       if (traitStates[trait.name] && traitStates[trait.name] !== 'unselected') {
@@ -82,29 +78,6 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
       trait.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }, [traits, searchTerm])
-
-  // Sort traits: active ones first (sorted alphabetically), then inactive ones (sorted alphabetically)
-  const sortedTraits = useMemo(() => {
-    return [...filteredTraits].sort((a, b) => {
-      const aState = traitStates[a.name] || 'unselected'
-      const bState = traitStates[b.name] || 'unselected'
-      
-      // Active traits (include/exclude) come first
-      const aActive = aState !== 'unselected'
-      const bActive = bState !== 'unselected'
-      
-      if (aActive && !bActive) return -1
-      if (!aActive && bActive) return 1
-      
-      // If both are active, sort alphabetically
-      if (aActive && bActive) {
-        return a.name.localeCompare(b.name)
-      }
-      
-      // If both are inactive, sort alphabetically
-      return a.name.localeCompare(b.name)
-    })
-  }, [filteredTraits, traitStates])
 
   const activeTraitCount = Object.values(traitStates).filter(state => state !== 'unselected').length
 
@@ -137,14 +110,17 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
     return (
       <div className="tiny-trait-pills">
         {visibleTraits.map(traitName => (
-          <span key={traitName} className={`tag-base tag-${state}`}>
-            {traitName}
-          </span>
+          <TinyTraitTag
+            key={traitName}
+            name={traitName}
+            state={state}
+          />
         ))}
         {remainingCount > 0 && (
-          <span className={`tag-base tag-${state}`}>
-            +{remainingCount} others
-          </span>
+          <TinyTraitTag
+            name={`+${remainingCount} others`}
+            state={state}
+          />
         )}
       </div>
     )
@@ -184,22 +160,16 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
       </div>
 
       {/* Trait Summary Display */}
-      {(traitSummary.includeTraits.length > 0 || traitSummary.excludeTraits.length > 0) && (
-        <div className="trait-summary">
-          {traitSummary.includeTraits.length > 0 && (
-            <div className="summary-section">
-              <span className="summary-label">Include:</span>
-              {renderTraitSummary(traitSummary.includeTraits, 'include')}
-            </div>
-          )}
-          {traitSummary.excludeTraits.length > 0 && (
-            <div className="summary-section">
-              <span className="summary-label">Exclude:</span>
-              {renderTraitSummary(traitSummary.excludeTraits, 'exclude')}
-            </div>
-          )}
+      <div className="trait-summary">
+        <div className="summary-section">
+          <span className="summary-label">Include:</span>
+          {renderTraitSummary(traitSummary.includeTraits, 'include')}
         </div>
-      )}
+        <div className="summary-section">
+          <span className="summary-label">Exclude:</span>
+          {renderTraitSummary(traitSummary.excludeTraits, 'exclude')}
+        </div>
+      </div>
 
       {!isCollapsed && (
         <>
@@ -224,15 +194,14 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
 
           <div className="trait-pills-container">
             <div className="trait-pills">
-              {sortedTraits.map(trait => (
-                <button
+              {filteredTraits.map(trait => (
+                <TraitTag
                   key={trait.id}
-                  className={getTraitClass(trait.name)}
+                  name={trait.name}
+                  state={traitStates[trait.name] || 'unselected'}
                   onClick={() => toggleTrait(trait.name)}
-                  title={trait.description}
-                >
-                  {trait.name}
-                </button>
+                  description={trait.description}
+                />
               ))}
             </div>
           </div>

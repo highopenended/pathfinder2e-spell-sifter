@@ -31,7 +31,7 @@
 
 
 .tradition-btn {
-  /* Inherits from .tag-base in globals.css */
+  /* Inherits from .tag-base in TraitTag.css */
   min-width: 70px;
   text-align: center;
 }

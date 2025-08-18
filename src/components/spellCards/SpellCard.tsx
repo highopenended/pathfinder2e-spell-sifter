@@ -1,5 +1,6 @@
 import React from 'react'
 import './SpellCard.css'
+import TinyTraitTag from '../traitTags/TinyTraitTag'
 import type { SpellWithJoins } from '../../types/spell'
 
 interface SpellCardProps {
@@ -17,13 +18,12 @@ const SpellCard: React.FC<SpellCardProps> = ({ spell }) => {
       {spell.spell_traits && spell.spell_traits.length > 0 && (
         <div className="spell-traits tiny-trait-pills">
           {spell.spell_traits.map(({ traits }) => (
-            <span
+            <TinyTraitTag
               key={traits.id}
-              className="tag-base tag-readonly"
-              title={traits.description || traits.name}
-            >
-              {traits.name}
-            </span>
+              name={traits.name}
+              state="readonly"
+              description={traits.description}
+            />
           ))}
         </div>
       )}

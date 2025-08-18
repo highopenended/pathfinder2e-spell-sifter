@@ -1,0 +1,93 @@
+/* Base tag styling */
+.tag-base {
+  background: var(--color-bg-primary);
+  color: var(--color-text-muted);
+  border: 2px solid var(--color-border-primary);
+  padding: 6px 12px;
+  font-family: var(--font-family-primary);
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: var(--border-radius-small);
+  transition: var(--transition-fast);
+  white-space: nowrap;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px var(--color-shadow-light);
+  cursor: pointer;
+}
+
+.tag-base:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px var(--color-shadow-medium);
+}
+
+.tag-base:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px var(--color-shadow-light);
+}
+
+/* Include state styles */
+.tag-include {
+  background: var(--color-success);
+  color: var(--color-white);
+  border-color: var(--color-success-border);
+  box-shadow: 0 2px 4px var(--color-shadow-success);
+}
+
+.tag-include:hover {
+  background: var(--color-success-hover);
+  border-color: var(--color-success-hover);
+  box-shadow: 0 3px 6px var(--color-shadow-success-hover);
+}
+
+/* Exclude state styles */
+.tag-exclude {
+  background: var(--color-danger);
+  color: var(--color-white);
+  border-color: var(--color-danger-border);
+  box-shadow: 0 2px 4px var(--color-shadow-danger);
+}
+
+.tag-exclude:hover {
+  background: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+  box-shadow: 0 3px 6px var(--color-shadow-danger-hover);
+}
+
+/* Trait pills container styling */
+.trait-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 12px;
+  min-height: 50px;
+}
+
+.trait-pills-container {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 2px solid var(--color-border-primary);
+  border-radius: var(--border-radius-large);
+  background: var(--color-bg-primary);
+}
+
+/* Custom scrollbar for webkit browsers */
+.trait-pills-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.trait-pills-container::-webkit-scrollbar-track {
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius-small);
+}
+
+.trait-pills-container::-webkit-scrollbar-thumb {
+  background: var(--color-border-secondary);
+  border-radius: var(--border-radius-small);
+}
+
+.trait-pills-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-accent);
+}
