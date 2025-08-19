@@ -28,6 +28,7 @@ export const fetchFilteredSpellCount = async (options?: {
   traitStates?: Record<string, TraitState>
   traditionLogicMode?: 'AND' | 'OR'
   traitLogicMode?: 'AND' | 'OR'
+  rankRange?: { min: number; max: number }
 }): Promise<number | null> => {
   try {
     let query = supabase
@@ -67,6 +68,11 @@ export const fetchFilteredSpellCount = async (options?: {
           query = query.overlaps('trait_names', selectedTraits)
         }
       }
+    }
+
+    // Apply rank range filtering
+    if (options?.rankRange) {
+      query = query.gte('rank', options.rankRange.min).lte('rank', options.rankRange.max)
     }
 
     const { count, error } = await query
@@ -139,6 +145,7 @@ export const fetchSpellsWithTraits = async (options?: {
   traitStates?: Record<string, TraitState>
   traditionLogicMode?: 'AND' | 'OR'
   traitLogicMode?: 'AND' | 'OR'
+  rankRange?: { min: number; max: number }
 }): Promise<SpellWithJoins[]> => {
   try {
     // Use the optimized view instead of manual JOINs
@@ -202,10 +209,15 @@ export const fetchSpellsWithTraits = async (options?: {
           // ALL traits (contains)
           query = query.contains('trait_names', selectedTraits)
         } else {
-          // ANY traits (overlaps)
+          // ALL traits (overlaps)
           query = query.overlaps('trait_names', selectedTraits)
         }
       }
+    }
+
+    // Apply rank range filtering
+    if (options?.rankRange) {
+      query = query.gte('rank', options.rankRange.min).lte('rank', options.rankRange.max)
     }
 
     const { data, error } = await query

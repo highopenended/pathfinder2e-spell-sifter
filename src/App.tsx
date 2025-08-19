@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 import SpellNameSearch from './components/spellNameSearch/SpellNameSearch'
 import TraditionFilter from './components/traditionFilter/TraditionFilter'
+import RankFilter from './components/rankFilter/RankFilter'
 import TraitFilter from './components/traitFilter/TraitFilter'
 import SpellListOutput from './components/spellListOutput/SpellListOutput'
 import { DatabaseTest } from './components/databaseTest/DatabaseTest'
@@ -23,6 +24,7 @@ function App() {
   const [traitStates, setTraitStates] = useState<Record<string, TraitState>>({})
   const [traditionLogicMode, setTraditionLogicMode] = useState<'AND' | 'OR'>('OR')
   const [traitLogicMode, setTraitLogicMode] = useState<'AND' | 'OR'>('OR')
+  const [rankRange, setRankRange] = useState<{ min: number; max: number }>({ min: 1, max: 10 })
   const [loading, setLoading] = useState(false)
   const [spells, setSpells] = useState<SpellWithJoins[]>([])
   const [spellCount, setSpellCount] = useState<number | null>(null)
@@ -63,7 +65,8 @@ function App() {
         traditionStates: traditionStates,
         traitStates: traitStates,
         traditionLogicMode: traditionLogicMode,
-        traitLogicMode: traitLogicMode
+        traitLogicMode: traitLogicMode,
+        rankRange: rankRange
       })
       
       setSpells(spellsData)
@@ -74,7 +77,8 @@ function App() {
         traditionStates: traditionStates,
         traitStates: traitStates,
         traditionLogicMode: traditionLogicMode,
-        traitLogicMode: traitLogicMode
+        traitLogicMode: traitLogicMode,
+        rankRange: rankRange
       })
       
       if (filteredCount !== null) {
@@ -103,7 +107,8 @@ function App() {
         traditionStates: traditionStates,
         traitStates: traitStates,
         traditionLogicMode: traditionLogicMode,
-        traitLogicMode: traitLogicMode
+        traitLogicMode: traitLogicMode,
+        rankRange: rankRange
       })
       
       setSpells(spellsData)
@@ -140,6 +145,27 @@ function App() {
     })
   }
 
+  const handleRankChange = (type: 'min' | 'max', value: number) => {
+    setRankRange(prev => {
+      let newMin = prev.min
+      let newMax = prev.max
+      
+      if (type === 'min') {
+        newMin = Math.max(1, Math.min(10, value))
+        if (newMin > prev.max) {
+          newMax = newMin
+        }
+      } else {
+        newMax = Math.max(1, Math.min(10, value))
+        if (newMax < prev.min) {
+          newMin = newMax
+        }
+      }
+      
+      return { min: newMin, max: newMax }
+    })
+  }
+
   return (
     <div className="App">
       <h1>Spell Sifter</h1>
@@ -163,6 +189,12 @@ function App() {
                 onLogicChange={setTraditionLogicMode}
               />
                 </div>
+            <div className="section-box">
+              <RankFilter
+                rankRange={rankRange}
+                onRankChange={handleRankChange}
+              />
+            </div>
             <div className="section-box">
               <TraitFilter
                 traitStates={traitStates}
