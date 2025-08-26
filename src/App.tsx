@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
-import SpellNameSearch from './components/spellNameSearch/SpellNameSearch'
-import TraditionFilter from './components/traditionFilter/TraditionFilter'
-import RankFilter from './components/rankFilter/RankFilter'
+import GeneralFilter from './components/generalFilter/GeneralFilter'
 import TraitFilter from './components/traitFilter/TraitFilter'
 import SpellListOutput from './components/spellListOutput/SpellListOutput'
 import { DatabaseTest } from './components/databaseTest/DatabaseTest'
@@ -175,22 +173,14 @@ function App() {
         <div className="search-criteria">
           <div className="column-container">
             <div className="section-box">
-              <SpellNameSearch
+              <GeneralFilter
                 searchTerm={searchTerm}
                 onSearchChange={setSearchTerm}
                 onSearch={handleSearch}
-              />
-        </div>
-            <div className="section-box">
-              <TraditionFilter
                 traditionStates={traditionStates}
                 onTraditionChange={handleTraditionChange}
-                logicMode={traditionLogicMode}
-                onLogicChange={setTraditionLogicMode}
-              />
-                </div>
-            <div className="section-box">
-              <RankFilter
+                traditionLogicMode={traditionLogicMode}
+                onTraditionLogicChange={setTraditionLogicMode}
                 rankRange={rankRange}
                 onRankChange={handleRankChange}
               />
