@@ -169,7 +169,7 @@ export const DatabaseTest: React.FC = () => {
       console.log('⚙️ Testing Helper Functions...');
       
       try {
-        const { data: functionTest, error: funcError } = await supabase
+        const { error: funcError } = await supabase
           .rpc('fn_spell_ids_with_any_traits', { req_traits: ['Fire'] });
         
         if (funcError) {

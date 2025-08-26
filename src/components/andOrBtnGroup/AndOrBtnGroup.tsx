@@ -10,9 +10,7 @@ const AndOrBtnGroup: React.FC<AndOrBtnGroupProps> = ({
   logicMode,
   onLogicChange
 }) => {
-  const handleToggle = () => {
-    onLogicChange(logicMode === 'AND' ? 'OR' : 'AND')
-  }
+
 
   return (
     <div className="logic-segmented-control">

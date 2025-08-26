@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import GeneralFilters from './components/generalFilters/GeneralFilters'
 import TraitFilter from './components/traitFilter/TraitFilter'

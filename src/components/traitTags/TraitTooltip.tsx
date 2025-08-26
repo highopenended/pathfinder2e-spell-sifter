@@ -39,7 +39,6 @@ const TraitTooltip: React.FC<TraitTooltipProps> = ({ content, isVisible, targetR
       
       // Default to top placement, only flip if insufficient space above
       const spaceAbove = rect.top
-      const spaceBelow = viewportHeight - rect.bottom
       const minSpaceNeeded = tooltipHeight + 10
       
       const placement = spaceAbove >= minSpaceNeeded ? 'top' : 'bottom'
