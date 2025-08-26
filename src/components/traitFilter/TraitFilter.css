@@ -73,7 +73,7 @@
   font-family: var(--font-family-primary);
   font-size: 14px;
   border-radius: var(--border-radius-medium);
-  transition: border-color var(--transition-fast);
+
 }
 
 .trait-search-input:focus {

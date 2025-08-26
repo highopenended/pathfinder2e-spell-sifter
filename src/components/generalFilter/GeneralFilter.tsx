@@ -134,6 +134,10 @@ const GeneralFilter: React.FC<GeneralFilterProps> = ({
       <div className="filter-section">
         <div className="tradition-row">
           <span className="filter-label">Traditions:</span>
+          <AndOrBtnGroup 
+            logicMode={traditionLogicMode}
+            onLogicChange={onTraditionLogicChange}
+          />
           <div className="tradition-buttons">
             {traditions.map(tradition => (
               <button
@@ -145,10 +149,6 @@ const GeneralFilter: React.FC<GeneralFilterProps> = ({
               </button>
             ))}
           </div>
-          <AndOrBtnGroup 
-            logicMode={traditionLogicMode}
-            onLogicChange={onTraditionLogicChange}
-          />
         </div>
       </div>
 

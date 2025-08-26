@@ -10,16 +10,20 @@ const AndOrBtnGroup: React.FC<AndOrBtnGroupProps> = ({
   logicMode,
   onLogicChange
 }) => {
+  const handleToggle = () => {
+    onLogicChange(logicMode === 'AND' ? 'OR' : 'AND')
+  }
+
   return (
-    <div className="logic-toggle">
+    <div className="logic-segmented-control">
       <button 
-        className={`btn-base ${logicMode === 'AND' ? 'btn-primary' : ''}`}
+        className={`logic-segment ${logicMode === 'AND' ? 'active' : ''}`}
         onClick={() => onLogicChange('AND')}
       >
         AND
       </button>
       <button 
-        className={`btn-base ${logicMode === 'OR' ? 'btn-primary' : ''}`}
+        className={`logic-segment ${logicMode === 'OR' ? 'active' : ''}`}
         onClick={() => onLogicChange('OR')}
       >
         OR
