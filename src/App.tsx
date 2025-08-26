@@ -20,12 +20,16 @@ function App() {
     'Primal': 'unselected'
   })
   const [traitStates, setTraitStates] = useState<Record<string, TraitState>>({})
+  const [spellTypeStates, setSpellTypeStates] = useState<Record<string, boolean>>({
+    'Cantrips': false,
+    'Ranked': false,
+    'Focus': false
+  })
   const [traditionLogicMode, setTraditionLogicMode] = useState<'AND' | 'OR'>('OR')
   const [traitLogicMode, setTraitLogicMode] = useState<'AND' | 'OR'>('OR')
   const [rankRange, setRankRange] = useState<{ min: number; max: number }>({ min: 1, max: 10 })
   const [loading, setLoading] = useState(false)
   const [spells, setSpells] = useState<SpellWithJoins[]>([])
-  const [spellCount, setSpellCount] = useState<number | null>(null)
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1)
@@ -37,7 +41,6 @@ function App() {
     const getSpellCount = async () => {
       try {
         const count = await fetchSpellCount()
-        setSpellCount(count)
         if (count) {
           setTotalPages(Math.ceil(count / SPELLS_PER_PAGE))
         }
@@ -143,6 +146,13 @@ function App() {
     })
   }
 
+  const handleSpellTypeChange = (spellType: string, selected: boolean) => {
+    setSpellTypeStates(prev => ({
+      ...prev,
+      [spellType]: selected
+    }))
+  }
+
   const handleRankChange = (type: 'min' | 'max', value: number) => {
     setRankRange(prev => {
       let newMin = prev.min
@@ -181,6 +191,8 @@ function App() {
                 onTraditionChange={handleTraditionChange}
                 traditionLogicMode={traditionLogicMode}
                 onTraditionLogicChange={setTraditionLogicMode}
+                spellTypeStates={spellTypeStates}
+                onSpellTypeChange={handleSpellTypeChange}
                 rankRange={rankRange}
                 onRankChange={handleRankChange}
               />

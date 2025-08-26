@@ -156,7 +156,7 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
             onLogicChange={onLogicChange}
           />
           <button 
-            className="btn-base btn-neutral"
+            className="interactive-base interactive-neutral"
             onClick={() => setIsCollapsed(!isCollapsed)}
           >
             {isCollapsed ? '▼' : '▲'}
@@ -190,7 +190,7 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
             </div>
             <button 
               onClick={clearAllTraits}
-              className="btn-base btn-danger"
+              className="interactive-base interactive-exclude"
               disabled={activeTraitCount === 0}
             >
               Clear All

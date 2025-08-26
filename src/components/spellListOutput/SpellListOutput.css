@@ -56,7 +56,7 @@
 }
 
 .pagination-btn {
-  /* Inherits from .btn-base and .btn-secondary in globals.css */
+  /* Inherits from .interactive-base and .interactive-secondary in globals.css */
   min-width: 40px;
   font-size: 14px;
   font-weight: 500;

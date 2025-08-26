@@ -62,7 +62,7 @@ const SpellListOutput: React.FC<SpellListOutputProps> = ({
           <button 
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage <= 1}
-            className="pagination-btn btn-base btn-secondary"
+            className="pagination-btn interactive-base interactive-secondary"
           >
             Previous
           </button>
@@ -72,7 +72,7 @@ const SpellListOutput: React.FC<SpellListOutputProps> = ({
               <button
                 key={pageNum}
                 onClick={() => handlePageChange(pageNum)}
-                className={`pagination-btn btn-base btn-secondary ${pageNum === currentPage ? 'active' : ''}`}
+                className={`pagination-btn interactive-base interactive-secondary ${pageNum === currentPage ? 'active' : ''}`}
               >
                 {pageNum}
               </button>
@@ -82,7 +82,7 @@ const SpellListOutput: React.FC<SpellListOutputProps> = ({
           <button 
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage >= totalPages}
-            className="pagination-btn btn-base btn-secondary"
+            className="pagination-btn interactive-base interactive-secondary"
           >
             Next
           </button>

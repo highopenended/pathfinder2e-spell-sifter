@@ -30,7 +30,7 @@
 
 
 .logic-btn.active {
-  /* Inherits from .btn-primary in globals.css */
+  /* Inherits from .interactive-base and .interactive-primary in globals.css */
 }
 
 .logic-btn:hover:not(.active) {
@@ -39,7 +39,7 @@
 }
 
 .collapse-btn {
-  /* Inherits from .btn-neutral in globals.css */
+  /* Inherits from .interactive-base and .interactive-neutral in globals.css */
   min-width: 40px;
 }
 

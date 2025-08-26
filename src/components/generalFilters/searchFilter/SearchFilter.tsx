@@ -28,7 +28,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
         placeholder="Search spells..."
         className="search-input"
       />
-      <button onClick={onSearch} className="search-btn">
+      <button onClick={onSearch} className="search-btn interactive-base interactive-primary">
         Search
       </button>
     </div>

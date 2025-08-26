@@ -3,6 +3,7 @@ import './GeneralFilters.css'
 import SearchFilter from './searchFilter/SearchFilter'
 import RankFilter from './rankFilter/RankFilter'
 import TraditionFilter from './traditionFilter/TraditionFilter'
+import TypeFilter from './typeFilter/TypeFilter'
 import type { TraditionState } from '../../App'
 
 interface GeneralFiltersProps {
@@ -17,6 +18,10 @@ interface GeneralFiltersProps {
   traditionLogicMode: 'AND' | 'OR'
   onTraditionLogicChange: (mode: 'AND' | 'OR') => void
   
+  // TypeFilter props
+  spellTypeStates: Record<string, boolean>
+  onSpellTypeChange: (spellType: string, selected: boolean) => void
+  
   // RankFilter props
   rankRange: { min: number; max: number }
   onRankChange: (type: 'min' | 'max', value: number) => void
@@ -30,6 +35,8 @@ const GeneralFilters: React.FC<GeneralFiltersProps> = ({
   onTraditionChange,
   traditionLogicMode,
   onTraditionLogicChange,
+  spellTypeStates,
+  onSpellTypeChange,
   rankRange,
   onRankChange
 }) => {
@@ -44,7 +51,7 @@ const GeneralFilters: React.FC<GeneralFiltersProps> = ({
         />
       </div>
 
-      {/* Combined Filters Section - Rank and Traditions */}
+      {/* Combined Filters Section - Rank, Traditions, and Type */}
       <div className="filter-section combined-section">
         <div className="filter-container">
           <RankFilter
@@ -59,6 +66,13 @@ const GeneralFilters: React.FC<GeneralFiltersProps> = ({
             onTraditionChange={onTraditionChange}
             traditionLogicMode={traditionLogicMode}
             onTraditionLogicChange={onTraditionLogicChange}
+          />
+        </div>
+        
+        <div className="filter-container">
+          <TypeFilter
+            spellTypeStates={spellTypeStates}
+            onSpellTypeChange={onSpellTypeChange}
           />
         </div>
       </div>

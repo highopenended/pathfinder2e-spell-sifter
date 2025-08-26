@@ -36,9 +36,9 @@ const TraitTag: React.FC<TraitTagProps> = ({
   }
 
   const getTagClass = () => {
-    if (state === 'include') return 'tag-base tag-include'
-    if (state === 'exclude') return 'tag-base tag-exclude'
-    return 'tag-base'
+    if (state === 'include') return 'interactive-base interactive-include tag-base'
+    if (state === 'exclude') return 'interactive-base interactive-exclude tag-base'
+    return 'interactive-base tag-base'
   }
 
   const TagElement = onClick ? 'button' : 'span'

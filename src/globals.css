@@ -65,89 +65,137 @@
 }
 
 /* =========================
-   Shared Button Styles
+   Shared Button & Interactive Styles
    ========================= */
 
-/* Base button styling that can be extended by components */
-.btn-base {
-  background: var(--color-bg-secondary);
+/* Base interactive element styling - for buttons, tags, pills, etc. */
+.interactive-base {
+  background: var(--color-bg-primary);
   color: var(--color-text-muted);
-  border: 2px solid var(--color-border-primary);
-  padding: 0.375rem 0.75rem;
+  border: 1px solid var(--color-border-primary);
+  padding: 0.125rem 0.375rem;
   cursor: pointer;
   font-family: var(--font-family-primary);
   font-weight: 600;
   font-size: 0.75rem;
   border-radius: var(--border-radius-small);
+  outline: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 2px var(--color-shadow-light);
 }
 
-.btn-base:hover {
+.interactive-base:hover {
   background: var(--color-bg-tertiary);
   border-color: var(--color-border-secondary);
 }
 
-/* Primary button styles */
-.btn-primary {
+.interactive-base:focus {
+  outline: none;
+  border-color: var(--color-border-accent);
+}
+
+/* State variants for interactive elements */
+.interactive-include {
+  background: var(--color-success);
+  color: var(--color-white);
+  border-color: var(--color-success-border);
+  box-shadow: 0 1px 2px var(--color-shadow-success);
+}
+
+.interactive-include:hover {
+  background: var(--color-success-hover);
+  border-color: var(--color-success-hover);
+}
+
+.interactive-exclude {
+  background: var(--color-danger);
+  color: var(--color-white);
+  border-color: var(--color-danger-border);
+  box-shadow: 0 1px 2px var(--color-shadow-danger);
+}
+
+.interactive-exclude:hover {
+  background: var(--color-danger-hover);
+  border-color: var(--color-danger-hover);
+}
+
+
+
+/* Additional interactive variants */
+.interactive-primary {
   background: var(--color-btn-primary);
   color: var(--color-white);
   border-color: var(--color-btn-primary);
 }
 
-.btn-primary:hover {
+.interactive-primary:hover {
   background: var(--color-btn-primary-hover);
   border-color: var(--color-btn-primary-hover);
 }
 
-/* Danger button styles */
-.btn-danger {
-  background: var(--color-danger);
-  color: var(--color-white);
-  border-color: var(--color-danger);
-}
-
-.btn-danger:hover {
-  background: var(--color-danger-hover);
-  border-color: var(--color-danger-hover);
-}
-
-/* Neutral button styles */
-.btn-neutral {
+.interactive-neutral {
   background: var(--color-neutral);
   color: var(--color-white);
   border-color: var(--color-neutral);
 }
 
-.btn-neutral:hover {
+.interactive-neutral:hover {
   background: var(--color-neutral-hover);
   border-color: var(--color-neutral-hover);
 }
 
-/* Button states */
-.btn-base:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-base:disabled:hover {
-  background: var(--color-bg-secondary);
-  border-color: var(--color-border-primary);
-}
-
-/* Secondary button styles (for pagination, etc.) */
-.btn-secondary {
+.interactive-secondary {
   background: var(--color-white);
   color: var(--color-text-secondary);
   border-color: var(--color-border-primary);
 }
 
-.btn-secondary:hover:not(:disabled) {
+.interactive-secondary:hover:not(:disabled) {
   border-color: var(--color-border-secondary);
   background: var(--color-bg-primary);
-  transform: translateY(-1px);
 }
 
-.btn-secondary.active {
+.interactive-secondary.active {
   background: var(--color-text-secondary);
   color: var(--color-white);
   border-color: var(--color-text-secondary);
+}
+
+/* Disabled state for all interactive elements */
+.interactive-base:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.interactive-base:disabled:hover {
+  background: var(--color-bg-primary);
+  border-color: var(--color-border-primary);
+}
+
+/* =========================
+   Shared Filter Layout Styles
+   ========================= */
+
+/* Common filter component layout */
+.filter-component {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Common filter header layout */
+.filter-header {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+/* Common filter button group layout */
+.filter-button-group {
+  display: flex;
+  gap: 0.0625rem;
+  align-items: center;
 }

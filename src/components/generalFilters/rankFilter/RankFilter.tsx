@@ -56,8 +56,10 @@ const RankFilter: React.FC<RankFilterProps> = ({
   }
 
   return (
-    <div className="rank-filter">
-      <span className="filter-label">Spell Rank:</span>
+    <div className="filter-component">
+      <div className="filter-header">
+        <span className="filter-label">Rank</span>
+      </div>
       <div className="rank-inputs">
         <input
           ref={minInputRef}

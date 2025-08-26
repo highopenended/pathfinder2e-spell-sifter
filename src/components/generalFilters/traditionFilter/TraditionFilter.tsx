@@ -36,21 +36,21 @@ const TraditionFilter: React.FC<TraditionFilterProps> = ({
 
   const getTraditionClass = (tradition: string) => {
     const state = traditionStates[tradition]
-    if (state === 'include') return 'tag-base tag-include'
-    if (state === 'exclude') return 'tag-base tag-exclude'
-    return 'tag-base'
+    if (state === 'include') return 'interactive-base interactive-include tag-button'
+    if (state === 'exclude') return 'interactive-base interactive-exclude tag-button'
+    return 'interactive-base tag-button'
   }
 
   return (
-    <div className="tradition-filter">
-      <div className="tradition-label-wrapper">
-        <span className="filter-label">Traditions:</span>
+    <div className="filter-component">
+      <div className="filter-header">
+        <span className="filter-label">Traditions</span>
         <AndOrBtnGroup 
           logicMode={traditionLogicMode}
           onLogicChange={onTraditionLogicChange}
         />
       </div>
-      <div className="tradition-buttons">
+      <div className="filter-button-group">
         {traditions.map(tradition => (
           <button
             key={tradition}
