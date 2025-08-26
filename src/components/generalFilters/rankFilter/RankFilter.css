@@ -1,0 +1,46 @@
+.rank-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.9375rem;
+}
+
+.rank-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rank-input {
+  background: var(--color-bg-primary);
+  border: 2px solid var(--color-border-primary);
+  color: var(--color-text-primary);
+  padding: 0.375rem 0.5rem;
+  font-family: var(--font-family-primary);
+  font-size: 0.875rem;
+  width: 2.25rem;
+  text-align: center;
+  border-radius: var(--border-radius-small);
+}
+
+.rank-input:focus {
+  outline: none;
+  border-color: var(--color-border-accent);
+  box-shadow: 0 0 0 3px var(--color-shadow-light);
+}
+
+.rank-input::-webkit-outer-spin-button,
+.rank-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.rank-input[type=number] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.rank-separator {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  font-size: 0.75rem;
+}

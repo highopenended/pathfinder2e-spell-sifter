@@ -1,0 +1,39 @@
+/* General Filters Layout Styles */
+.general-filters {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+/* Filter sections - reusable layout containers */
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+}
+
+/* Combined filters section - horizontal layout for rank and traditions */
+.filter-section.combined-section {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+/* Container for individual filter components within combined section */
+.filter-container {
+  flex: 0 1 auto;
+  min-width: fit-content;
+}
+
+/* Shared filter label styling */
+.filter-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  white-space: nowrap;
+  min-width: 5rem;
+}

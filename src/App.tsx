@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
-import GeneralFilter from './components/generalFilter/GeneralFilter'
+import GeneralFilters from './components/generalFilters/GeneralFilters'
 import TraitFilter from './components/traitFilter/TraitFilter'
 import SpellListOutput from './components/spellListOutput/SpellListOutput'
 import { DatabaseTest } from './components/databaseTest/DatabaseTest'
@@ -173,7 +173,7 @@ function App() {
         <div className="search-criteria">
           <div className="column-container">
             <div className="section-box">
-              <GeneralFilter
+              <GeneralFilters
                 searchTerm={searchTerm}
                 onSearchChange={setSearchTerm}
                 onSearch={handleSearch}
