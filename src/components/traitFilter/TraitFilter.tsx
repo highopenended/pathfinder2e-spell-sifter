@@ -15,7 +15,7 @@ interface TraitFilterProps {
   onLogicChange: (mode: 'AND' | 'OR') => void
 }
 
-const TraitFilter: React.FC<TraitFilterProps> = ({
+const TraitFilter: React.FC<TraitFilterProps> = React.memo(({
   traitStates,
   onTraitChange,
   logicMode,
@@ -70,6 +70,14 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
     })
   }
 
+  // Create O(1) trait lookup map
+  const traitLookup = useMemo(() => 
+    traits.reduce((acc, trait) => {
+      acc[trait.name] = trait
+      return acc
+    }, {} as Record<string, Trait>)
+  , [traits])
+
   // Filter traits based on search term
   const filteredTraits = useMemo(() => {
     if (!searchTerm.trim()) return traits
@@ -81,14 +89,14 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
 
   const activeTraitCount = Object.values(traitStates).filter(state => state !== 'unselected').length
 
-  // Create summary display for active traits
+  // Create summary display for active traits - optimized with O(1) lookups
   const traitSummary = useMemo(() => {
     const includeTraits: { name: string; description: string }[] = []
     const excludeTraits: { name: string; description: string }[] = []
     
     Object.entries(traitStates).forEach(([traitName, state]) => {
-      // Find the trait object to get the description
-      const trait = traits.find(t => t.name === traitName)
+      // O(1) lookup instead of O(n) search
+      const trait = traitLookup[traitName]
       if (trait) {
         if (state === 'include') {
           includeTraits.push({ name: traitName, description: trait.description })
@@ -103,7 +111,7 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
     excludeTraits.sort((a, b) => a.name.localeCompare(b.name))
     
     return { includeTraits, excludeTraits }
-  }, [traitStates, traits])
+  }, [traitStates, traitLookup])
 
   const renderTraitSummary = (traits: { name: string; description: string }[], state: 'include' | 'exclude', maxVisible: number = 5) => {
     if (traits.length === 0) return null
@@ -214,6 +222,6 @@ const TraitFilter: React.FC<TraitFilterProps> = ({
       )}
     </div>
   )
-}
+})
 
 export default TraitFilter
