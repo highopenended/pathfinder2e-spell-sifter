@@ -1,6 +1,5 @@
 import React from 'react'
 import './GeneralFilters.css'
-import SearchFilter from './searchFilter/SearchFilter'
 import RankFilter from './rankFilter/RankFilter'
 import TraditionFilter from './traditionFilter/TraditionFilter'
 import TypeFilter from './typeFilter/TypeFilter'
@@ -40,41 +39,56 @@ const GeneralFilters: React.FC<GeneralFiltersProps> = ({
   rankRange,
   onRankChange
 }) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      onSearch()
+    }
+  }
+
   return (
     <div className="general-filters">
-      {/* Search Section */}
-      <div className="filter-section">
-        <SearchFilter
-          searchTerm={searchTerm}
-          onSearchChange={onSearchChange}
-          onSearch={onSearch}
+      {/* Search Input - col-span-8 desktop, col-span-12 mobile */}
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => onSearchChange(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="Search spells..."
+        className="search-input grid-col-8"
+      />
+      
+      {/* Search Button - col-span-4 desktop, col-span-12 mobile */}
+      <button 
+        onClick={onSearch} 
+        className="search-btn interactive-base interactive-primary grid-col-4"
+      >
+        Search
+      </button>
+
+      {/* Rank Filter - col-span-4 desktop, col-span-12 mobile */}
+      <div className="grid-col-4">
+        <RankFilter
+          rankRange={rankRange}
+          onRankChange={onRankChange}
         />
       </div>
-
-      {/* Combined Filters Section - Rank, Traditions, and Type */}
-      <div className="filter-section combined-section">
-        <div className="filter-container">
-          <RankFilter
-            rankRange={rankRange}
-            onRankChange={onRankChange}
-          />
-        </div>
-        
-        <div className="filter-container">
-          <TraditionFilter
-            traditionStates={traditionStates}
-            onTraditionChange={onTraditionChange}
-            traditionLogicMode={traditionLogicMode}
-            onTraditionLogicChange={onTraditionLogicChange}
-          />
-        </div>
-        
-        <div className="filter-container">
-          <TypeFilter
-            spellTypeStates={spellTypeStates}
-            onSpellTypeChange={onSpellTypeChange}
-          />
-        </div>
+      
+      {/* Traditions Filter - col-span-8 desktop, col-span-12 mobile */}
+      <div className="grid-col-8">
+        <TraditionFilter
+          traditionStates={traditionStates}
+          onTraditionChange={onTraditionChange}
+          traditionLogicMode={traditionLogicMode}
+          onTraditionLogicChange={onTraditionLogicChange}
+        />
+      </div>
+      
+      {/* Spell Types Filter - col-span-12 all breakpoints */}
+      <div className="grid-col-12">
+        <TypeFilter
+          spellTypeStates={spellTypeStates}
+          onSpellTypeChange={onSpellTypeChange}
+        />
       </div>
     </div>
   )

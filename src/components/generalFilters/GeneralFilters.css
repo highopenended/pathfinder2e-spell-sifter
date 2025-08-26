@@ -1,44 +1,63 @@
-/* General Filters Layout Styles */
+/* General Filters Grid Layout */
 .general-filters {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0.75rem;
   width: 100%;
-  gap: 0.5rem;
   padding: 0.125rem 0;
 }
 
-/* Filter sections - reusable layout containers */
-.filter-section {
-  display: flex;
-  flex-direction: column;
+/* Grid column span classes */
+.grid-col-4 {
+  grid-column: span 4;
+}
+
+.grid-col-8 {
+  grid-column: span 8;
+}
+
+.grid-col-12 {
+  grid-column: span 12;
+}
+
+/* Mobile responsive - everything spans full width */
+@media (max-width: 768px) {
+  .grid-col-4,
+  .grid-col-8,
+  .grid-col-12 {
+    grid-column: span 12;
+  }
+}
+
+/* Search input styling */
+.search-input {
   width: 100%;
-  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-medium);
+  background: var(--color-white);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-primary);
+  font-size: 0.875rem;
+  outline: none;
+  box-shadow: 0 1px 2px var(--color-shadow-light);
 }
 
-/* Combined filters section - horizontal layout for rank and traditions */
-.filter-section.combined-section {
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: flex-start;
+.search-input:focus {
+  border-color: var(--color-border-accent);
+  box-shadow: 0 1px 2px var(--color-shadow-medium);
 }
 
-/* Container for individual filter components within combined section */
-.filter-container {
-  flex: 0 1 auto;
-  min-width: fit-content;
-  position: relative;
+.search-input::placeholder {
+  color: var(--color-text-muted);
 }
 
-/* Add subtle dividing line between filter containers */
-.filter-container:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: -0.5rem;
-  width: 1px;
-  height: 100%;
-  background: linear-gradient(180deg, transparent 0%, var(--color-border-primary) 20%, var(--color-border-primary) 80%, transparent 100%);
+/* Search button styling */
+.search-btn {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
 }
 
 /* Shared filter label styling */
