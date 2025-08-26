@@ -43,11 +43,13 @@ const TraditionFilter: React.FC<TraditionFilterProps> = ({
 
   return (
     <div className="tradition-filter">
-      <span className="filter-label">Traditions:</span>
-      <AndOrBtnGroup 
-        logicMode={traditionLogicMode}
-        onLogicChange={onTraditionLogicChange}
-      />
+      <div className="tradition-label-wrapper">
+        <span className="filter-label">Traditions:</span>
+        <AndOrBtnGroup 
+          logicMode={traditionLogicMode}
+          onLogicChange={onTraditionLogicChange}
+        />
+      </div>
       <div className="tradition-buttons">
         {traditions.map(tradition => (
           <button

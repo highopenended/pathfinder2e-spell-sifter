@@ -1,18 +1,37 @@
 .tradition-filter {
   display: flex;
   align-items: center;
-  gap: 0.9375rem;
+  gap: 0.5rem;
+}
+
+.tradition-label-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  min-width: fit-content;
+}
+
+.tradition-label-wrapper .filter-label {
+  text-align: center;
+  margin: 0;
 }
 
 .tradition-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.25rem;
+  align-items: center;
 }
 
 .tradition-btn {
   /* Inherits from .tag-base in TraitTag.css */
   min-width: 4.375rem;
   text-align: center;
+}
+
+/* Override padding for tradition buttons specifically */
+.tradition-buttons .tag-base {
+  padding: 0.25rem 0.5rem;
 }
 
 .tradition-btn:hover {
